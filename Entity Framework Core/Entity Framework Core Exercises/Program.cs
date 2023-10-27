@@ -16,6 +16,9 @@ namespace Entity_Framework_Core_Exercises
             
             //05. Employees from Research and Development Test
             Console.WriteLine(GetEmployeesFromResearchAndDevelopment(context));
+            
+            //06.Adding a New Address and Updating Employee Test
+            Console.WriteLine(AddNewAddressToEmployee(context));
         }
         
         //03. Employee Full Information
@@ -61,6 +64,32 @@ namespace Entity_Framework_Core_Exercises
                 .ThenBy(e => e.FirstName);
                 
             return string.Join(Environment.NewLine,employees.Select(x=>$"{x.FirstName} {x.LastName} from {x.Name} - {x.Salary:c2}"));
+        }
+        //06.Adding a New Address and Updating Employee
+        public static string AddNewAddressToEmployee(SoftUniContext context)
+        {
+            Address newAddress = new Address()
+            {
+                AddressText="Vitoshka 15",
+                TownId = 4
+            };
+            
+            var employee = context.Employees.FirstOrDefault(e => e.LastName == "Nakov");
+            employee.Address = newAddress;
+
+            context.SaveChanges();
+
+            var employeesAdresses = context.Employees
+                .Select(e => new
+                {
+                    e.AddressId,
+                    e.Address.AddressText
+                })
+                .OrderByDescending(e => e.AddressId)
+                .Take(10).
+                ToList();
+            
+            return string.Join(Environment.NewLine, employeesAdresses.Select(ea=>$"{ea.AddressText}"));
         }
     }
 }
