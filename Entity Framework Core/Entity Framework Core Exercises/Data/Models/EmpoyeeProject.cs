@@ -12,6 +12,6 @@ namespace Entity_Framework_Core_Exercises.Data.Models
         public virtual Employee Employee { get; set; }
 
         public int ProjectId { get; set; }
-        public Project Project { get; set; }
+        public virtual Project Project { get; set; }
     }
 }
