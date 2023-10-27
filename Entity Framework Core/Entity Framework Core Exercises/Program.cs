@@ -19,6 +19,9 @@ namespace Entity_Framework_Core_Exercises
             
             //06.Adding a New Address and Updating Employee Test
             Console.WriteLine(AddNewAddressToEmployee(context));
+            
+            //13. Find Employees by First Name Starting with "Sa" Test
+            Console.WriteLine(GetEmployeesByFirstNameStartingWithSa(context));
         }
         
         //03. Employee Full Information
@@ -90,6 +93,22 @@ namespace Entity_Framework_Core_Exercises
                 ToList();
             
             return string.Join(Environment.NewLine, employeesAdresses.Select(ea=>$"{ea.AddressText}"));
+        }
+        //13. Find Employees by First Name Starting with "Sa"
+        public static string GetEmployeesByFirstNameStartingWithSa(SoftUniContext context)
+        {
+            var employees = context.Employees
+                .Select(e => new
+                {
+                    e.FirstName,
+                    e.LastName,
+                    e.JobTitle,
+                    e.Salary
+                })
+                .Where(e => e.FirstName.StartsWith("sa"))
+                .ToList();
+
+            return string.Join(Environment.NewLine, employees.Select(e => $"{e.FirstName} {e.LastName} - {e.JobTitle} - (${e.Salary:f2})"));
         }
     }
 }
