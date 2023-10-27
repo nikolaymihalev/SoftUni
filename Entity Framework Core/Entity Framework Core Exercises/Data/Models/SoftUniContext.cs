@@ -21,6 +21,7 @@ namespace Entity_Framework_Core_Exercises.Data.Models
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Project> Projects { get; set; } = null!;
         public virtual DbSet<Town> Towns { get; set; } = null!;
+        public virtual DbSet<EmpoyeeProject> EmpoyeesProjects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -111,23 +112,7 @@ namespace Entity_Framework_Core_Exercises.Data.Models
                     .WithMany(p => p.InverseManager)
                     .HasForeignKey(d => d.ManagerId)
                     .HasConstraintName("FK_Employees_Employees");
-
-                entity.HasMany(d => d.Projects)
-                    .WithMany(p => p.Employees)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "EmployeesProject",
-                        l => l.HasOne<Project>().WithMany().HasForeignKey("ProjectId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_EmployeesProjects_Projects"),
-                        r => r.HasOne<Employee>().WithMany().HasForeignKey("EmployeeId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_EmployeesProjects_Employees"),
-                        j =>
-                        {
-                            j.HasKey("EmployeeId", "ProjectId");
-
-                            j.ToTable("EmployeesProjects");
-
-                            j.IndexerProperty<int>("EmployeeId").HasColumnName("EmployeeID");
-
-                            j.IndexerProperty<int>("ProjectId").HasColumnName("ProjectID");
-                        });
+                                
             });
 
             modelBuilder.Entity<Project>(entity =>
@@ -152,6 +137,19 @@ namespace Entity_Framework_Core_Exercises.Data.Models
                 entity.Property(e => e.Name)
                     .HasMaxLength(50)
                     .IsUnicode(false);
+            });
+            //Setting mapping table 
+            modelBuilder.Entity<EmpoyeeProject>(entity => 
+            {
+                entity.HasKey(pk => new { pk.EmployeeId, pk.ProjectId });
+
+                entity.HasOne(ep => ep.Employee)
+                      .WithMany(e => e.EmpoyeesProjects)
+                      .HasForeignKey(ep=>ep.EmployeeId);
+
+                entity.HasOne(ep => ep.Project)
+                      .WithMany(p => p.EmployeesProjects)
+                      .HasForeignKey(p => p.ProjectId);
             });
 
             OnModelCreatingPartial(modelBuilder);

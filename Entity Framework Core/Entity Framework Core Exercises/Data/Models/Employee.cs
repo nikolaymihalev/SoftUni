@@ -9,7 +9,7 @@ namespace Entity_Framework_Core_Exercises.Data.Models
         {
             Departments = new HashSet<Department>();
             InverseManager = new HashSet<Employee>();
-            Projects = new HashSet<Project>();
+            EmpoyeesProjects = new HashSet<EmpoyeeProject>();
         }
 
         public int EmployeeId { get; set; }
@@ -29,6 +29,6 @@ namespace Entity_Framework_Core_Exercises.Data.Models
         public virtual ICollection<Department> Departments { get; set; }
         public virtual ICollection<Employee> InverseManager { get; set; }
 
-        public virtual ICollection<Project> Projects { get; set; }
+        public virtual ICollection<EmpoyeeProject> EmpoyeesProjects { get; set; }
     }
 }

@@ -7,7 +7,7 @@ namespace Entity_Framework_Core_Exercises.Data.Models
     {
         public Project()
         {
-            Employees = new HashSet<Employee>();
+            EmployeesProjects = new HashSet<EmpoyeeProject>();
         }
 
         public int ProjectId { get; set; }
@@ -16,6 +16,6 @@ namespace Entity_Framework_Core_Exercises.Data.Models
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }
 
-        public virtual ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<EmpoyeeProject> EmployeesProjects { get; set; }
     }
 }
