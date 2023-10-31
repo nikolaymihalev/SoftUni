@@ -29,5 +29,7 @@ namespace P02_FootballBetting.Data.Models
         public int TeamId { get; set; }
         [ForeignKey(nameof(TeamId))]
         public virtual Team Team { get; set; }
+
+        public ICollection<PlayerStatistic> PlayerStatistics { get; set; }
     }
 }

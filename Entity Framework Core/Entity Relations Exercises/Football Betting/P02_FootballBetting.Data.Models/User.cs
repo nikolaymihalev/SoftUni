@@ -16,5 +16,7 @@ namespace P02_FootballBetting.Data.Models
         public string Password { get; set; }
         public string Email { get; set; }
         public decimal Balance { get; set; }
+
+        public ICollection<Bet> Bets { get; set; }
     }
 }
