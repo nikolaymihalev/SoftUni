@@ -32,5 +32,11 @@ namespace P02_FootballBetting.Data.Models
         public Town Town { get; set; }
 
         public virtual ICollection<Player> Players { get; set; }
+
+        [InverseProperty(nameof(Game.HomeTeam))]
+        public ICollection<Game> HomeGames { get; set; }
+
+        [InverseProperty(nameof(Game.AwayTeam))]
+        public ICollection<Game> AwayGames { get; set; }
     }
 }
