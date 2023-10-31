@@ -13,5 +13,6 @@ namespace P02_FootballBetting.Data.Models
         [Required]
         [MaxLength(50)]
         public string Name { get; set; } = null!;
+        public ICollection<Player> Players { get; set; }
     }
 }
