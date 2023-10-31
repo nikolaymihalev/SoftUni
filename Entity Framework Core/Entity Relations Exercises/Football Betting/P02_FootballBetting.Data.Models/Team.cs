@@ -26,5 +26,11 @@ namespace P02_FootballBetting.Data.Models
         public int SecondaryKitColorId { get; set; }
         [ForeignKey(nameof(SecondaryKitColorId))]
         public virtual Color SecondaryKitColor { get; set; }
+
+        public int TownId { get; set; }
+        [ForeignKey(nameof(TownId))]
+        public Town Town { get; set; }
+
+        public virtual ICollection<Player> Players { get; set; }
     }
 }

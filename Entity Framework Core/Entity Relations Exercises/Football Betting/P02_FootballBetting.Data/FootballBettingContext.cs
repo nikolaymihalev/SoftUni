@@ -18,6 +18,7 @@ namespace P02_FootballBetting.Data
         public DbSet<Color> Colors { get; set; }
         public DbSet<Position> Positions { get; set; }
         public DbSet<Player> Players { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
