@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using P02_FootballBetting.Data;
 
@@ -10,9 +11,11 @@ using P02_FootballBetting.Data;
 namespace P02_FootballBetting.Data.Migrations
 {
     [DbContext(typeof(FootballBettingContext))]
-    partial class FootballBettingContextModelSnapshot : ModelSnapshot
+    [Migration("20231031080047_Initial_Added_Country_Town1")]
+    partial class Initial_Added_Country_Town1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,34 +61,6 @@ namespace P02_FootballBetting.Data.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Towns");
-                });
-
-            modelBuilder.Entity("P02_FootballBetting.Data.Models.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
-
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserId");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("P02_FootballBetting.Data.Models.Town", b =>
