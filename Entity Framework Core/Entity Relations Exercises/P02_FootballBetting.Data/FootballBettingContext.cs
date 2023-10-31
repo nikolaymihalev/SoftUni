@@ -15,6 +15,7 @@ namespace P02_FootballBetting.Data
         public DbSet<Town> Towns { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Color> Colors { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
