@@ -10,6 +10,11 @@ namespace P02_FootballBetting.Data
 {
     public class FootballBettingContext : DbContext
     {
+        public FootballBettingContext(DbContextOptions dbContextOptions):base(dbContextOptions)
+        {
+
+        }
+
         const string ConnectionString = "Server=.;Database=FootballBetting;Trusted_Connection=True;MultipleActiveResultSets=true;Encrypt=false";
 
         public DbSet<Town> Towns { get; set; }
