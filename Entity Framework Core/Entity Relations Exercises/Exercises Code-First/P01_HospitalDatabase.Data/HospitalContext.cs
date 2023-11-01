@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using P01_HospitalDatabase.Data.Configurations;
 using P01_HospitalDatabase.Data.Models;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,15 @@ namespace P01_HospitalDatabase.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new PatientConfiguration());
+
+            modelBuilder.Entity<Visitation>().Property(v => v.Comments).HasMaxLength(250).IsUnicode(true);
+
+            modelBuilder.Entity<Diagnose>().Property(d => d.Name).HasMaxLength(50).IsUnicode(true);
+            modelBuilder.Entity<Diagnose>().Property(d => d.Comments).HasMaxLength(250).IsUnicode(true);
+
+            modelBuilder.Entity<Medicament>().Property(m => m.Name).HasMaxLength(50).IsUnicode(true);
+
             modelBuilder.Entity<PatientMedicament>().HasKey(pm => new { pm.PatientId, pm.MedicamentId });
         }
     }
