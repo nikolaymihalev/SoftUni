@@ -26,14 +26,9 @@ namespace P01_HospitalDatabase.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
-
-            modelBuilder.Entity<Visitation>().Property(v => v.Comments).HasMaxLength(250).IsUnicode(true);
-
-            modelBuilder.Entity<Diagnose>().Property(d => d.Name).HasMaxLength(50).IsUnicode(true);
-            modelBuilder.Entity<Diagnose>().Property(d => d.Comments).HasMaxLength(250).IsUnicode(true);
-
-            modelBuilder.Entity<Medicament>().Property(m => m.Name).HasMaxLength(50).IsUnicode(true);
-
+            modelBuilder.ApplyConfiguration(new VisitationConfiguration());
+            modelBuilder.ApplyConfiguration(new DiagnoseConfiguration());
+            modelBuilder.ApplyConfiguration(new MedicamentConfiguration());
             modelBuilder.Entity<PatientMedicament>().HasKey(pm => new { pm.PatientId, pm.MedicamentId });
         }
     }
