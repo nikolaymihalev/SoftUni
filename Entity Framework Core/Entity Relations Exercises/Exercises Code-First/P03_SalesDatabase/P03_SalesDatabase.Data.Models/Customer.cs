@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace P03_SalesDatabase.P03_SalesDatabase.Data.Models
 {
-    public class Product
+    public class Customer
     {
-        public int ProductId { get; set; }
+        public int CustomerId { get; set; }
         public string Name { get; set; }
-        public decimal Quantity { get; set; }
-        public decimal Price { get; set; }
+        public string Email { get; set; }
+        public string CreditCardNumber { get; set; }
 
         public ICollection<Sale> Sales { get; set; }
     }
