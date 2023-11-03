@@ -66,6 +66,25 @@ namespace MusicHub
 
         public static string ExportSongsAboveDuration(MusicHubDbContext context, int duration)
         {
+            var songs = context.Songs
+                .Include(s => s.SongsPerformers)
+                    .ThenInclude(sp => sp.Performer)
+                .Include(s => s.Writer)
+                .Include(s => s.Album)
+                    .ThenInclude(a => a.Producer)
+                .AsEnumerable()
+                .Where(s => s.Duration.TotalSeconds > duration)
+                .Select(s=> new
+                {
+                    s.Name,
+                    Performers = s.SongsPerformers.Select(sp=>sp.Performer.FirstName+" "+sp.Performer.LastName).ToList(),
+                    WriterName = s.Writer.Name,
+                    AlbumProducer = s.Album.Producer.Name,
+                    Duration = s.Duration.ToString("c")
+                })
+                .OrderBy(s=>s.Name)
+                .ThenBy(s=>s.WriterName)
+                .ToList();
             throw new NotImplementedException();
         }
     }
