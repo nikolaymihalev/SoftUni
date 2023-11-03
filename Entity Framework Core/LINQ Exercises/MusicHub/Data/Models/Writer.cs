@@ -10,6 +10,6 @@ public class Writer
     [Required]
     [MaxLength(30)]
     public string Name { get; set; }
-    public string Pseudonym { get; set; }
+    public string? Pseudonym { get; set; }
     public virtual ICollection<Song> Songs { get; set; }
 }

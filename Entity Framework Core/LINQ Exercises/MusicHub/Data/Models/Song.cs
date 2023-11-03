@@ -18,16 +18,16 @@ public class Song
 
     [Required]
     public DateTime CreatedOn { get; set; }
-
+    [Required]
     public Genre Genre { get; set; }
-
+    [Required]
     public decimal Price { get; set; }
-    public int AlbumId { get; set; }
+    public int? AlbumId { get; set; }
     [ForeignKey(nameof(AlbumId))]
-    public virtual Album Album { get; set; }
+    public virtual Album? Album { get; set; }
     public int WriterId { get; set; }
     [ForeignKey(nameof(WriterId))]
     public virtual Writer Writer { get; set; }
 
-    public virtual ICollection<SongPerformer> SongPerformers { get; set; }
+    public virtual ICollection<SongPerformer> SongsPerformers { get; set; }
 }
