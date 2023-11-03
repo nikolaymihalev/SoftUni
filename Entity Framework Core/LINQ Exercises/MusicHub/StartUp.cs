@@ -1,4 +1,6 @@
-﻿namespace MusicHub
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace MusicHub
 {
     using System;
 
@@ -19,6 +21,23 @@
 
         public static string ExportAlbumsInfo(MusicHubDbContext context, int producerId)
         {
+            var albumInfo = context.Producers
+                .Include(x=>x.Albums).ThenInclude(x=>x.Songs).ThenInclude(s=>s.Writer)
+                .First(x => x.Id == producerId)
+                .Albums.Select(a=>new
+                {
+                    AlbumName= a.Name,
+                    ReleaseDate = a.ReleaseDate,
+                    ProducerName = a.Producer.Name,
+                    AlbumSongs = a.Songs.Select(s=>new
+                    {
+                        SongName= s.Name,
+                        SongPrice= s.Price,
+                        SongWriterName=s.Writer.Name
+                    }).OrderByDescending(x=>x.SongName).ThenBy(x=>x.SongWriterName),
+                    TotalAlbumPrice=a.Price
+                }).OrderByDescending(x=>x.TotalAlbumPrice);
+            
             throw new NotImplementedException();
         }
 
