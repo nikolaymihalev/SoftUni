@@ -24,10 +24,10 @@ public class Song
     public decimal Price { get; set; }
     public int AlbumId { get; set; }
     [ForeignKey(nameof(AlbumId))]
-    public Album Album { get; set; }
+    public virtual Album Album { get; set; }
     public int WriterId { get; set; }
     [ForeignKey(nameof(WriterId))]
-    public Writer Writer { get; set; }
+    public virtual Writer Writer { get; set; }
 
-    public ICollection<SongPerformer> SongPerformers { get; set; }
+    public virtual ICollection<SongPerformer> SongPerformers { get; set; }
 }
