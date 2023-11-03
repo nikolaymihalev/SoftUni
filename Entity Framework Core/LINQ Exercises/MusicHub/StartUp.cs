@@ -92,10 +92,14 @@ namespace MusicHub
             foreach (var song in songs)
             {
                 sb.AppendLine($"-Song #{count++}")
-                    .AppendLine($"SongName {song.Name}")
-                    .AppendLine($"Writer {song.WriterName}")
-                    .AppendLine($"AlbumProducer {song.AlbumProducer}")
-                    .AppendLine($"Duration {song.Duration}");
+                    .AppendLine($"---SongName: {song.Name}")
+                    .AppendLine($"---Writer: {song.WriterName}")
+                    .AppendLine($"---AlbumProducer: {song.AlbumProducer}")
+                    .AppendLine($"---Duration: {song.Duration}");
+                if (song.Performers.Any())
+                {
+                    sb.AppendLine($"---Performer: {string.Join(", ", song.Performers)}");
+                }
             }
             return sb.ToString().TrimEnd();
         }
