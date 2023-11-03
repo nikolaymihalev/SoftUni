@@ -5,6 +5,7 @@ namespace MusicHub.Data.Models;
 
 public class Album
 {
+    [Key]
     public int Id { get; set; }
     [Required]
     [MaxLength(40)]
