@@ -44,7 +44,7 @@ namespace MusicHub
             foreach (var album in albumInfo)
             {
                 sb.AppendLine($"-AlbumName: {album.AlbumName}")
-                    .AppendLine($"-ReleaseDate: {album.ReleaseDate}")
+                    .AppendLine($"-ReleaseDate: {album.ReleaseDate.ToString("MM/dd/yyyy")}")
                     .AppendLine($"-ProducerName: {album.ProducerName}")
                     .AppendLine($"-Songs:");
                 if (album.AlbumSongs.Any())
@@ -54,14 +54,14 @@ namespace MusicHub
                     {
                         sb.AppendLine($"---#{count++}")
                             .AppendLine($"---SongName: {song.SongName}")
-                            .AppendLine($"---Price: {song.SongPrice}")
+                            .AppendLine($"---Price: {song.SongPrice:f2}")
                             .AppendLine($"---Writer: {song.SongWriterName}");
                     }
                 }
 
-                sb.AppendLine($"AlbumPrice: {album.TotalAlbumPrice:f2}");
+                sb.AppendLine($"-AlbumPrice: {album.TotalAlbumPrice:f2}");
             }
-            return sb.ToString().Trim();
+            return sb.ToString().TrimEnd();
         }
 
         public static string ExportSongsAboveDuration(MusicHubDbContext context, int duration)
