@@ -85,7 +85,19 @@ namespace MusicHub
                 .OrderBy(s=>s.Name)
                 .ThenBy(s=>s.WriterName)
                 .ToList();
-            throw new NotImplementedException();
+
+            StringBuilder sb = new StringBuilder();
+            
+            int count = 1;
+            foreach (var song in songs)
+            {
+                sb.AppendLine($"-Song #{count++}")
+                    .AppendLine($"SongName {song.Name}")
+                    .AppendLine($"Writer {song.WriterName}")
+                    .AppendLine($"AlbumProducer {song.AlbumProducer}")
+                    .AppendLine($"Duration {song.Duration}");
+            }
+            return sb.ToString().TrimEnd();
         }
     }
 }
