@@ -3,6 +3,7 @@
     using BookShop.Models.Enums;
     using Data;
     using Initializer;
+    using System.Globalization;
 
     public class StartUp
     {
@@ -91,6 +92,26 @@
                 .ToList();
 
             return String.Join(Environment.NewLine, books.Select(b => b.Title));
+        }
+
+
+        //07
+        public static string GetBooksReleasedBefore(BookShopContext context, string date)
+        {
+            var parsedDate = DateTime.ParseExact(date, "dd-MM-yyyy",CultureInfo.InvariantCulture);
+
+            var books = context.Books
+                .Select(b => new
+                {
+                    b.Title,
+                    b.EditionType,
+                    b.Price,
+                    b.ReleaseDate
+                })
+                .Where(b => b.ReleaseDate < parsedDate)
+                .OrderByDescending(b => b.ReleaseDate);
+
+            return String.Join(Environment.NewLine, books.Select(b => $"{b.Title} - {b.EditionType} - ${b.Price:f2}"));
         }
     }
 }
