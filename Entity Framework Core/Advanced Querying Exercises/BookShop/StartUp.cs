@@ -42,6 +42,21 @@
 
             return String.Join(Environment.NewLine, books.Select(b => b.Title));
         }
+
+        public static string GetBooksByPrice(BookShopContext context)
+        {
+            var books = context.Books
+                .Where(b => b.Price>40)
+                .Select(b =>new
+                {
+                    b.Title,
+                    b.Price
+                })
+                .OrderByDescending(b=>b.Price)
+                .ToList();
+
+            return String.Join(Environment.NewLine, books.Select(b => $"{b.Title} ${b.Price:f2}"));
+        }
     }
 }
 
