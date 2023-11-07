@@ -158,6 +158,13 @@
 
             return String.Join(Environment.NewLine, books.Select(b => $"{b.BookTitle} ({b.AuthorName})"));
         }
+
+        //11
+        public static int CountBooks(BookShopContext context, int lengthCheck)
+        {
+            return context.Books
+                .Count(b => b.Title.Length > lengthCheck);
+        }
     }
 }
 
