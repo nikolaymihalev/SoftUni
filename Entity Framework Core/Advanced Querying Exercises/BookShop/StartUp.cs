@@ -128,6 +128,21 @@
 
             return String.Join(Environment.NewLine, authors.Select(a=>a.FullName));
         }
+
+        //09
+        public static string GetBookTitlesContaining(BookShopContext context, string input)
+        {
+            var books = context.Books
+                .Where(b => b.Title.Contains(input))
+                .Select(b => new
+                {
+                    b.Title
+                })
+                .OrderBy(b => b.Title)
+                .ToList();
+
+            return String.Join(Environment.NewLine, books.Select(b => b.Title));
+        }
     }
 }
 
