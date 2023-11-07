@@ -9,12 +9,10 @@
         public static void Main()
         {
             using var db = new BookShopContext();
-            //DbInitializer.ResetDatabase(db);
-
-            string input=Console.ReadLine();
-            //Console.WriteLine(GetBooksByAgeRestriction(db,input));
+            DbInitializer.ResetDatabase(db);
         }
 
+        //02
         public static string GetBooksByAgeRestriction(BookShopContext context, string command) 
         {
             if (!Enum.TryParse<AgeRestriction>(command, true, out var ageRestriction)) 
@@ -34,6 +32,7 @@
             return String.Join(Environment.NewLine, books.Select(b=>b.Title));
         }
 
+        //03
         public static string GetGoldenBooks(BookShopContext context)
         {
             var books = context.Books
@@ -43,6 +42,7 @@
             return String.Join(Environment.NewLine, books.Select(b => b.Title));
         }
 
+        //04
         public static string GetBooksByPrice(BookShopContext context)
         {
             var books = context.Books
@@ -56,6 +56,21 @@
                 .ToList();
 
             return String.Join(Environment.NewLine, books.Select(b => $"{b.Title} ${b.Price:f2}"));
+        }
+
+        //05
+        public static string GetBooksNotReleasedIn(BookShopContext context, int year)
+        {
+            var books = context.Books
+                .Where(b => b.ReleaseDate.HasValue && b.ReleaseDate.Value.Year != year)
+                .Select(b => new 
+                {
+                    b.Title,
+                    b.ReleaseDate
+                })
+                .ToList();
+
+            return String.Join(Environment.NewLine, books.Select(b => b.Title));
         }
     }
 }
