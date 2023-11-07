@@ -113,6 +113,21 @@
 
             return String.Join(Environment.NewLine, books.Select(b => $"{b.Title} - {b.EditionType} - ${b.Price:f2}"));
         }
+
+        //08
+        public static string GetAuthorNamesEndingIn(BookShopContext context, string input)
+        {
+            var authors = context.Authors
+                .Where(a=> a.FirstName.EndsWith(input))
+                .Select(a => new
+                {
+                    FullName= a.FirstName+" "+a.LastName
+                })
+                .OrderBy(a=>a.FullName)
+                .ToList();
+
+            return String.Join(Environment.NewLine, authors.Select(a=>a.FullName));
+        }
     }
 }
 
