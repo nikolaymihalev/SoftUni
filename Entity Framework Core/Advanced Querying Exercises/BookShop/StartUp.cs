@@ -4,6 +4,7 @@
     using Data;
     using Initializer;
     using System.Globalization;
+    using System.Text;
 
     public class StartUp
     {
@@ -196,6 +197,39 @@
 
             return String.Join(Environment.NewLine, profit.Select(c => $"{c.CategoryName} ${c.TotalProfit:F2}"));
         }
+
+        //14
+        public static string GetMostRecentBooks(BookShopContext context)
+        {
+            var booksCategories = context.Categories
+                .Select(c => new
+                {
+                    CategoryName = c.Name,
+                    MostRecentBooks = c.CategoryBooks
+                                       .OrderByDescending(x => x.Book.ReleaseDate)
+                                       .Take(3)
+                                       .Select(cb => new
+                                       {
+                                           BookTitle = cb.Book.Title,
+                                           cb.Book.ReleaseDate.Value.Year
+                                       })
+                })
+                .OrderBy(c => c.CategoryName);
+
+            StringBuilder sb = new StringBuilder();
+
+            foreach (var bookCat in booksCategories) 
+            {
+                sb.AppendLine($"--{bookCat.CategoryName}");
+                foreach (var book in bookCat.MostRecentBooks) 
+                {
+                    sb.AppendLine($"{book.BookTitle} ({book.Year})");
+                }
+            }
+
+            return sb.ToString().TrimEnd();
+        }
+
     }
 }
 
