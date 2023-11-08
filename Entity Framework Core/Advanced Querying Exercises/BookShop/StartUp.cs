@@ -241,6 +241,16 @@
             context.SaveChanges();
         }
 
+        //16
+        public static int RemoveBooks(BookShopContext context)
+        {
+            var books = context.Books.Where(b => b.Copies < 4200);
+
+            context.RemoveRange(books);
+            context.SaveChanges();
+            return books.Count();
+        }
+
     }
 }
 
