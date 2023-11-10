@@ -4,6 +4,7 @@
     using FastFood.Core.ViewModels.Categories;
     using FastFood.Core.ViewModels.Employees;
     using FastFood.Core.ViewModels.Items;
+    using FastFood.Core.ViewModels.Orders;
     using FastFood.Models;
     using ViewModels.Positions;
 
@@ -36,6 +37,9 @@
 
             CreateMap<Item, ItemsAllViewModels>()
                 .ForMember(i => i.Category, c => c.MapFrom(x => x.Category.Name));
+            
+            CreateMap<Order, OrderAllViewModel>()
+                .ForMember(i => i.Customer, c => c.MapFrom(x => x.Customer));
         }
     }
 }

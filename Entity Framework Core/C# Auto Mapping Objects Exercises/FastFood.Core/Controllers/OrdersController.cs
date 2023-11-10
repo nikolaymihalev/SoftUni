@@ -3,7 +3,9 @@
     using System;
     using System.Linq;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
+    using FastFood.Core.ViewModels.Items;
     using FastFood.Models;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Orders;
@@ -50,7 +52,11 @@
 
         public IActionResult All()
         {
-            throw new NotImplementedException();
+            var orders = _context.Orders
+                .ProjectTo<OrderAllViewModel>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            return View(orders);
         }
     }
 }
