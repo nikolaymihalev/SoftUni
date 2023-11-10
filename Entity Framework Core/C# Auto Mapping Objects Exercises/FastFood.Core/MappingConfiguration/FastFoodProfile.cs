@@ -30,8 +30,12 @@
             //Employees
             CreateMap<RegisterEmployeeInputModel, Employee>();
 
-            CreateMap<Category, CreateItemViewModel>();
-            
+            //Item
+            CreateMap<Category, CreateItemViewModel>()
+                .ForMember(ci=>ci.CategoryId, c=>c.MapFrom(x=>x.Id));
+
+            CreateMap<Item, ItemsAllViewModels>()
+                .ForMember(i => i.Category, c => c.MapFrom(x => x.Category.Name));
         }
     }
 }

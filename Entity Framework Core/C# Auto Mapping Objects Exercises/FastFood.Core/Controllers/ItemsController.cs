@@ -5,6 +5,7 @@
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
+    using FastFood.Models;
     using Microsoft.AspNetCore.Mvc;
     using ViewModels.Items;
 
@@ -24,7 +25,8 @@
             var categories = _context.Categories
                 .Select(c => new CreateItemViewModel 
                 {
-                    CategoryId = c.Id
+                    CategoryId = c.Id,
+                    Name = c.Name,
                 })
                 .ToList();
             return View(categories);
@@ -33,12 +35,29 @@
         [HttpPost]
         public IActionResult Create(CreateItemInputModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid) 
+            {
+                RedirectToAction("Error", "Home");
+            }
+            var newItem = new Item
+            {
+                Name = model.Name,
+                CategoryId = model.CategoryId,
+                Price = model.Price
+            };
+
+            _context.Items.Add(newItem);
+            _context.SaveChanges();
+            return RedirectToAction("All");
         }
 
         public IActionResult All()
         {
-            throw new NotImplementedException();
+            var items = _context.Items
+                .ProjectTo<ItemsAllViewModels>(_mapper.ConfigurationProvider)
+                .ToList();
+
+            return View(items);
         }
     }
 }
