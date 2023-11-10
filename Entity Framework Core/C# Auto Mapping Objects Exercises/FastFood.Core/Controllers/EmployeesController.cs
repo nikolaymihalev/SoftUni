@@ -2,8 +2,10 @@
 {
     using System;
     using AutoMapper;
+    using AutoMapper.QueryableExtensions;
     using Data;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using ViewModels.Employees;
 
     public class EmployeesController : Controller
@@ -17,9 +19,12 @@
             _mapper = mapper;
         }
 
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            throw new NotImplementedException();
+            var positions = await _context.Positions
+                .ProjectTo<RegisterEmployeeViewModel>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+            return View(positions);
         }
 
         [HttpPost]
