@@ -3,6 +3,7 @@
     using AutoMapper;
     using FastFood.Core.ViewModels.Categories;
     using FastFood.Core.ViewModels.Employees;
+    using FastFood.Core.ViewModels.Items;
     using FastFood.Models;
     using ViewModels.Positions;
 
@@ -28,6 +29,8 @@
 
             //Employees
             CreateMap<RegisterEmployeeInputModel, Employee>();
+
+            CreateMap<Category, CreateItemViewModel>();
             
         }
     }

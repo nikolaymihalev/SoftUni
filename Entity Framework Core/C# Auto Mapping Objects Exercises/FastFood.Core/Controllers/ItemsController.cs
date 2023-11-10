@@ -21,7 +21,13 @@
 
         public IActionResult Create()
         {
-            throw new NotImplementedException();
+            var categories = _context.Categories
+                .Select(c => new CreateItemViewModel 
+                {
+                    CategoryId = c.Id
+                })
+                .ToList();
+            return View(categories);
         }
 
         [HttpPost]
