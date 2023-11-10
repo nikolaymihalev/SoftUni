@@ -26,6 +26,8 @@
 
             CreateMap<Category, CategoryAllViewModel>();
 
+            //Employees
+            CreateMap<RegisterEmployeeInputModel, Employee>();
             
         }
     }

@@ -1,9 +1,11 @@
 ﻿namespace FastFood.Core.Controllers
 {
     using System;
+    using System.Security.Cryptography.Xml;
     using AutoMapper;
     using AutoMapper.QueryableExtensions;
     using Data;
+    using FastFood.Models;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using ViewModels.Employees;
@@ -30,12 +32,39 @@
         [HttpPost]
         public IActionResult Register(RegisterEmployeeInputModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid) 
+            {
+                RedirectToAction("Error", "Home");
+            }
+
+            //var employee = new Employee
+            //{
+            //    Name = model.Name,
+            //    Age = model.Age,
+            //    Address = model.Address,
+            //    PositionId = model.PositionId
+            //};
+
+            var employee = _mapper.Map<Employee>(model);
+
+            _context.Employees.Add(employee);
+            _context.SaveChanges();
+            return RedirectToAction("All");
         }
 
-        public IActionResult All()
+        public async Task<IActionResult> All()
         {
-            throw new NotImplementedException();
+            var employees = await _context.Employees
+                .Select(e=> new EmployeesAllViewModel 
+                {
+                    Name= e.Name,
+                    Address= e.Address,
+                    Age= e.Age,
+                    Position = e.Position.Name
+                })
+                .ToListAsync();
+
+            return View(employees);
         }
     }
 }
