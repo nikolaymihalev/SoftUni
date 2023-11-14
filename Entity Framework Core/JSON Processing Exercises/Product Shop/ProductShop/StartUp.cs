@@ -76,5 +76,31 @@ namespace ProductShop
 
             return json;
         }
+        
+        //06. Export sold products
+        public static string GetSoldProducts(ProductShopContext context) 
+        {
+            var usersWithSoldProducts = context.Users
+                .Where(u => u.ProductsSold.Any(p => p.BuyerId != null))
+                .OrderBy(u=>u.LastName)
+                    .ThenBy(u=>u.FirstName)
+                .Select(u=> new 
+                {
+                    firstName = u.FirstName,
+                    lastName = u.LastName,  
+                    soldProducts = u.ProductsSold
+                                    .Select(p=>new 
+                                    {
+                                        name = p.Name,
+                                        price = p.Price,
+                                        buyerFirstName = p.Buyer.FirstName,
+                                        buyerLastName = p.Buyer.LastName
+                                    })
+                })
+                .ToArray();
+
+            var json = JsonConvert.SerializeObject(usersWithSoldProducts, Formatting.Indented);
+            return json;
+        }
     }
 }
