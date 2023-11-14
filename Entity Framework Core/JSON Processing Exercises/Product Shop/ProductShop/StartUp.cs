@@ -146,8 +146,8 @@ namespace ProductShop
 
             var output = new
             {
-                userCount = usersWithProducts.Count(),
-                user = usersWithProducts.Select(u => new
+                usersCount = usersWithProducts.Count(),
+                users = usersWithProducts.Select(u => new
                 {
                     u.firstName,
                     u.lastName,
