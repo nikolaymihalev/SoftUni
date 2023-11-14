@@ -89,6 +89,7 @@ namespace ProductShop
                     firstName = u.FirstName,
                     lastName = u.LastName,  
                     soldProducts = u.ProductsSold
+                                    .Where(p=>p.BuyerId != null)
                                     .Select(p=>new 
                                     {
                                         name = p.Name,
@@ -100,6 +101,24 @@ namespace ProductShop
                 .ToArray();
 
             var json = JsonConvert.SerializeObject(usersWithSoldProducts, Formatting.Indented);
+            return json;
+        }
+        
+        //07. Export categories by products count
+        public static string GetCategoriesByProductsCount(ProductShopContext context) 
+        {
+            var categoriesByProductsCount = context.Categories
+                .Select(c => new
+                {
+                    category = c.Name,
+                    productsCount = c.CategoriesProducts.Count(),
+                    averagePrice = c.CategoriesProducts.Average(cp => cp.Product.Price).ToString("f2"),
+                    totalRevenue = c.CategoriesProducts.Sum(cp=>cp.Product.Price).ToString("f2")
+                })
+                .OrderByDescending(x=>x.productsCount)
+                .ToArray();
+            
+            var json = JsonConvert.SerializeObject(categoriesByProductsCount, Formatting.Indented);
             return json;
         }
     }
