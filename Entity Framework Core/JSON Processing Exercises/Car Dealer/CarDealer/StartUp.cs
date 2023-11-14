@@ -27,5 +27,27 @@ namespace CarDealer
 
             return $"Successfully imported {suppliers.Count()}";
         }
+        
+        //10. Import parts
+        public static string ImportParts(CarDealerContext context, string inputJson) 
+        {
+            var config = new MapperConfiguration(cfg => cfg.AddProfile<CarDealerProfile>());
+            IMapper mapper = new Mapper(config);
+
+            PartsDTO[] partsDTOs = JsonConvert.DeserializeObject<PartsDTO[]>(inputJson);
+            Part[] parts = mapper.Map<Part[]>(partsDTOs);
+
+            int[] suppliersIds = context.Suppliers
+                .Select(x => x.Id)
+                .ToArray();
+
+            Part[] partsWithValidSuppliers = parts.Where(p => suppliersIds.Contains(p.SupplierId)).ToArray();
+
+
+            context.Parts.AddRange(partsWithValidSuppliers);
+            context.SaveChanges();
+
+            return $"Successfully imported {partsWithValidSuppliers.Count()}";
+        }
     }
 }
