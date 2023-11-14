@@ -57,5 +57,24 @@ namespace ProductShop
             }
             return $"Successfullty imported {categoryProducts.Length}";
         }
+        
+        //05. Export products in range
+        public static string GetProductsInRange(ProductShopContext context) 
+        {
+            var produtctsInRange = context.Products
+                .Where(p => p.Price >= 500 && p.Price <= 1000)
+                .Select(p=>new 
+                {
+                    name = p.Name,
+                    price = p.Price,
+                    seller = p.Seller.FirstName + " " + p.Seller.LastName
+                })
+                .OrderBy(p=>p.price)
+                .ToArray();
+
+            var json = JsonConvert.SerializeObject(produtctsInRange, Formatting.Indented);
+
+            return json;
+        }
     }
 }
