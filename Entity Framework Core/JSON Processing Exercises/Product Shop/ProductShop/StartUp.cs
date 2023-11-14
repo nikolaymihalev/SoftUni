@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using ProductShop.Data;
 using ProductShop.Models;
+using System.Runtime.CompilerServices;
 
 namespace ProductShop
 {
@@ -119,6 +120,52 @@ namespace ProductShop
                 .ToArray();
             
             var json = JsonConvert.SerializeObject(categoriesByProductsCount, Formatting.Indented);
+            return json;
+        }
+
+        //08. Export users and products
+        public static string GetUsersWithProducts(ProductShopContext context)
+        {
+            var usersWithProducts = context.Users
+                .Where(u => u.ProductsSold.Any(p => p.BuyerId != null))
+                .Select(u => new
+                {
+                    firstName = u.FirstName,
+                    lastName = u.LastName,
+                    age = u.Age,
+                    soldProducts = u.ProductsSold.Where(p => p.BuyerId != null)
+                                                 .Select(p => new
+                                                 {
+                                                     name = p.Name,
+                                                     price = p.Price
+                                                 })
+                                                 .ToArray()
+                })
+                .OrderByDescending(u => u.soldProducts.Count())
+                .ToArray();
+
+            var output = new
+            {
+                userCount = usersWithProducts.Count(),
+                user = usersWithProducts.Select(u => new
+                {
+                    u.firstName,
+                    u.lastName,
+                    u.age,
+                    soldProducts = new
+                    {
+                        count = u.soldProducts.Count(),
+                        products = u.soldProducts
+                    }
+                })
+            };
+
+            string json = JsonConvert.SerializeObject(output, new JsonSerializerSettings 
+            {
+                Formatting = Formatting.Indented,
+                NullValueHandling = NullValueHandling.Ignore,
+            });
+
             return json;
         }
     }
