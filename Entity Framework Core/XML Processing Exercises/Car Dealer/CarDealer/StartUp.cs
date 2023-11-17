@@ -30,6 +30,26 @@ namespace CarDealer
 
             return $"Successfully imported {suppliers.Length}";
         }
+        
+        //10. Import Parts
+        public static string ImportParts(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ImportPartsDTO[]), new XmlRootAttribute("Parts"));
+
+            using var reader = new StringReader(inputXml);
+
+            ImportPartsDTO[] importPartDTOs = (ImportPartsDTO[])xmlSerializer.Deserialize(reader);
+
+            var supplierIds = context.Suppliers.Select(x => x.Id).ToArray();
+
+            var mapper = GetMapper();
+            Part[] parts = mapper.Map<Part[]>(importPartDTOs.Where(p=>supplierIds.Contains(p.SupplierId)));
+
+            context.AddRange(parts);
+            context.SaveChanges();
+
+            return $"Successfully imported {parts.Length}";
+        }
 
         static Mapper GetMapper() 
         {
