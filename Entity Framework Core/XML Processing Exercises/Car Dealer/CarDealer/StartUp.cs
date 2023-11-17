@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CarDealer.Data;
+using CarDealer.DTOs.Export;
 using CarDealer.DTOs.Import;
 using CarDealer.Models;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace CarDealer
@@ -129,6 +132,34 @@ namespace CarDealer
             context.SaveChanges();
 
             return $"Successfully imported {sales.Length}";
+        }
+
+        //14. Cars with Distance
+        public static string GetCarsWithDistance(CarDealerContext context) 
+        {
+            var mapper = GetMapper();
+
+            var cars = context.Cars
+                .Where(c=>c.TraveledDistance>2_000_000)
+                .OrderBy(c=>c.Make)
+                    .ThenBy(c=>c.Model)
+                .Take(10)
+                .ProjectTo<ExportCarsWithDistance>(mapper.ConfigurationProvider)
+                .ToArray();
+
+            var xmlSerializer = new XmlSerializer(typeof(ExportCarsWithDistance[]),new XmlRootAttribute("Cars"));
+
+            var xsn = new XmlSerializerNamespaces();
+            xsn.Add(String.Empty, String.Empty);
+
+
+            StringBuilder sb = new();
+            using (StringWriter sw = new StringWriter(sb)) 
+            {
+                xmlSerializer.Serialize(sw, cars, xsn);
+            }
+
+            return sb.ToString().TrimEnd();
         }
 
         static Mapper GetMapper() 
