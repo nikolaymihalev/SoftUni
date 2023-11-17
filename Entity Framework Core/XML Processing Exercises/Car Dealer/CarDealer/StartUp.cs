@@ -50,6 +50,46 @@ namespace CarDealer
 
             return $"Successfully imported {parts.Length}";
         }
+        
+        //11. Import Cars
+        public static string ImportCars(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ImportCarDTO[]), new XmlRootAttribute("Cars"));
+
+            using var reader = new StringReader(inputXml);
+
+            ImportCarDTO[] importCarDTOs = (ImportCarDTO[])xmlSerializer.Deserialize(reader);
+
+            var mapper = GetMapper();
+            List<Car> cars = new List<Car>();
+
+            foreach (var carDTO in importCarDTOs) 
+            {
+                Car car = mapper.Map<Car>(carDTO);
+
+                int[] carPartIds = carDTO.PartsIds.Select(x => x.Id).Distinct().ToArray();
+
+                var carParts = new List<PartCar>();
+
+                foreach (var id in carPartIds) 
+                {
+                    carParts.Add(new PartCar
+                    {
+                        Car = car,
+                        PartId = id
+                    });
+                }
+
+                car.PartsCars = carParts;
+
+                cars.Add(car);
+            }
+
+            context.AddRange(cars);
+            context.SaveChanges();
+
+            return $"Successfully imported {cars.Count}";
+        }
 
         static Mapper GetMapper() 
         {
