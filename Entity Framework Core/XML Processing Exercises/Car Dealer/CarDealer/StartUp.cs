@@ -91,6 +91,25 @@ namespace CarDealer
             return $"Successfully imported {cars.Count}";
         }
 
+        //12. Import Customers
+        public static string ImportCustomers(CarDealerContext context, string inputXml)
+        {
+            var xmlSerializer = new XmlSerializer(typeof(ImportCustomerDTO[]), new XmlRootAttribute("Customers"));
+
+            using var reader = new StringReader(inputXml);
+
+            ImportCustomerDTO[] importCustomerDTOs = (ImportCustomerDTO[])xmlSerializer.Deserialize(reader);
+
+
+            var mapper = GetMapper();
+            Customer[] customers = mapper.Map<Customer[]>(importCustomerDTOs);
+
+            context.AddRange(customers);
+            context.SaveChanges();
+
+            return $"Successfully imported {customers.Length}";
+        }
+
         static Mapper GetMapper() 
         {
             var cfg = new MapperConfiguration(c => c.AddProfile<CarDealerProfile>());
