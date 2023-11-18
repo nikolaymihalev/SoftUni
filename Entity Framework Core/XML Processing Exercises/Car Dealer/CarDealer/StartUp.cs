@@ -150,22 +150,7 @@ namespace CarDealer
             return SerializeToXML(cars, "Cars");            
         }
 
-        //18. Export Sales by Customers
-        public static string GetTotalSalesByCustomers(CarDealerContext context)
-        {
-            var totalSales = context.Customers
-                 .Where(c => c.Sales.Any())
-                 .Select(c => new ExportSalesPerCustomerDTO
-                 {
-                     FullName = c.Name,
-                     BoughtCars = c.Sales.Count(),
-                     SpentMoney = c.Sales.Sum(s => s.Car.PartsCars.Sum(x => c.IsYoungDriver ? x.Part.Price * 0.95m : x.Part.Price))
-                 })
-                 .OrderByDescending(x=>x.SpentMoney)
-                 .ToArray();
-
-            return SerializeToXML(totalSales, "Sales");
-        }
+        
 
         static Mapper GetMapper() 
         {
