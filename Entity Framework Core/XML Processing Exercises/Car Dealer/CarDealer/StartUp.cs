@@ -147,25 +147,53 @@ namespace CarDealer
                 .ProjectTo<ExportCarsWithDistance>(mapper.ConfigurationProvider)
                 .ToArray();
 
-            var xmlSerializer = new XmlSerializer(typeof(ExportCarsWithDistance[]),new XmlRootAttribute("Cars"));
+            return SerializeToXML(cars, "Cars");            
+        }
 
-            var xsn = new XmlSerializerNamespaces();
-            xsn.Add(String.Empty, String.Empty);
+        //18. Export Sales by Customers
+        public static string GetTotalSalesByCustomers(CarDealerContext context)
+        {
+            var totalSales = context.Customers
+                 .Where(c => c.Sales.Any())
+                 .Select(c => new ExportSalesPerCustomerDTO
+                 {
+                     FullName = c.Name,
+                     BoughtCars = c.Sales.Count(),
+                     SpentMoney = c.Sales.Sum(s => s.Car.PartsCars.Sum(x => c.IsYoungDriver ? x.Part.Price * 0.95m : x.Part.Price))
+                 })
+                 .OrderByDescending(x=>x.SpentMoney)
+                 .ToArray();
 
-
-            StringBuilder sb = new();
-            using (StringWriter sw = new StringWriter(sb)) 
-            {
-                xmlSerializer.Serialize(sw, cars, xsn);
-            }
-
-            return sb.ToString().TrimEnd();
+            return SerializeToXML(totalSales, "Sales");
         }
 
         static Mapper GetMapper() 
         {
             var cfg = new MapperConfiguration(c => c.AddProfile<CarDealerProfile>());
             return new Mapper(cfg);
+        }
+
+        static string SerializeToXML<T>(T dto, string xmlRootAttribute) 
+        {
+            var xmlSerializer = new XmlSerializer(typeof(T), new XmlRootAttribute(xmlRootAttribute));
+
+            var xsn = new XmlSerializerNamespaces();
+            xsn.Add(String.Empty, String.Empty);
+
+            StringBuilder sb = new();
+            using (StringWriter sw = new StringWriter(sb))
+            {
+                try
+                {
+                    xmlSerializer.Serialize(sw, dto, xsn);
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
