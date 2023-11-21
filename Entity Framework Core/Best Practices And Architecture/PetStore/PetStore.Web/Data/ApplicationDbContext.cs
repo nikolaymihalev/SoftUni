@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PetStore.Data.Models;
 
 namespace PetStore.Web.Data
 {
@@ -9,5 +10,6 @@ namespace PetStore.Web.Data
             : base(options)
         {
         }
+        public DbSet<PetStore.Data.Models.Category>? Category { get; set; }
     }
 }
