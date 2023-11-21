@@ -17,5 +17,11 @@ namespace PetStore.Web.Controllers
             var service = await _categoryService.GetAll();
             return View(service);
         }
+
+        [HttpGet]
+        public IActionResult Create() 
+        {
+            return View();
+        }
     }
 }
