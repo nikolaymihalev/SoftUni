@@ -23,5 +23,10 @@ namespace PetStore.Web.Controllers
         {
             return View();
         }
+
+        public async Task<IActionResult> Edit(int id) 
+        {
+            return View();
+        }
     }
 }
