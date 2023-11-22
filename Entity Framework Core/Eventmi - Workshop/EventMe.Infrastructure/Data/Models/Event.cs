@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventMe.Infrastructure.Data.Contracts;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +9,7 @@ namespace EventMe.Infrastructure.Data.Models
     /// Събитие
     /// </summary>
     [Comment("Събитие")]
-    public class Event
+    public class Event:IDeletable
     {
         /// <summary>
         /// Идентификатор на събитието
@@ -45,6 +46,19 @@ namespace EventMe.Infrastructure.Data.Models
         [Comment("Индефикатор на мястото")]
         [Required]
         public int PlaceId { get; set; }
+
+        /// <summary>
+        /// Събитието е активно
+        /// </summary>
+        [Comment("Събитието е активно")]
+        [Required]
+        public bool IsActive { get; set; } = true;
+
+        /// <summary>
+        /// Дата на изтриване
+        /// </summary>
+        [Comment("Дата на изтриване")]
+        public DateTime? DeletedOn { get; set; }
 
         /// <summary>
         /// Място на провеждане на събитие
