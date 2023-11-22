@@ -1,4 +1,5 @@
-﻿using EventMe.Infrastructure.Data.Models;
+﻿using EventMe.Infrastructure.Data.Configuration;
+using EventMe.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EventMe.Infrastructure.Data
@@ -18,8 +19,7 @@ namespace EventMe.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Event>()
-                .HasQueryFilter(e => e.IsActive);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(EventConfiguration).Assembly);
         }
 
         /// <summary>
