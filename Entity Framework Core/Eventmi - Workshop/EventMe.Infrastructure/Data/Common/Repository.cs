@@ -61,5 +61,10 @@ namespace EventMe.Infrastructure.Data.Common
             entity.IsActive = false;
             entity.DeletedOn = DateTime.Now;
         }
+
+        public async Task<T> GetById<T>(int id) where T : class
+        {
+            return await GetDbSet<T>().FindAsync(id);
+        }
     }
 }

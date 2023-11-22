@@ -51,6 +51,13 @@ namespace EventMe.Infrastructure.Data.Common
         IQueryable<T> AllWithDeletedReadOnly<T>() where T : class, IDeletable;
 
         /// <summary>
+        /// Извличане на елемент по индентификатор
+        /// </summary>
+        /// <typeparam name="T">Тип на елементите</typeparam>
+        /// <returns></returns>
+        Task<T> GetById<T>(int id) where T : class;
+
+        /// <summary>
         /// Запис на промените в базата данни
         /// </summary>
         /// <returns></returns>
