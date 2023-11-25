@@ -1,6 +1,8 @@
 using Blog.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Blog.Services.Interfaces;
+using Blog.Services;
 
 namespace Blog
 {
@@ -15,8 +17,11 @@ namespace Blog
             builder.Services.AddDbContext<BlogDBContext>(options=>
                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-                        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<BlogDBContext>();
+
+            builder.Services.AddTransient<IGenreService, GenreService>();
+            builder.Services.AddTransient<IArticleService, ArticleService>();
 
             var app = builder.Build();
 
@@ -30,6 +35,8 @@ namespace Blog
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.MapRazorPages();
 
             app.UseRouting();
 
