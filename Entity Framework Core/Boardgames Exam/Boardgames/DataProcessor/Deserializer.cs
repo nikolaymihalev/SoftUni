@@ -7,6 +7,7 @@
     using Boardgames.Data.Models;
     using Boardgames.Data.Models.Enums;
     using Boardgames.DataProcessor.ImportDto;
+    using Newtonsoft.Json;
 
     public class Deserializer
     {
@@ -72,7 +73,47 @@
 
         public static string ImportSellers(BoardgamesContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            ImportSellerDTO[] importSellerDTOs = JsonConvert.DeserializeObject<ImportSellerDTO[]>(jsonString);
+            List<Seller> sellers = new List<Seller>();
+
+            foreach (ImportSellerDTO seller in importSellerDTOs)
+            {
+                if (!IsValid(seller))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Seller sellerToAdd = new Seller()
+                {
+                    Name = seller.Name,
+                    Address = seller.Address,
+                    Country = seller.Country,
+                    Website = seller.Website,
+                };
+
+                foreach (int boardgameId in seller.Boardgames.Distinct())
+                {
+                    Boardgame b = context.Boardgames.Find(boardgameId);
+                    if (b == null)
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    sellerToAdd.BoardgamesSellers.Add(new BoardgameSeller()
+                    {
+                        Boardgame = b
+                    });
+                }
+
+                sellers.Add(sellerToAdd);
+                sb.AppendLine(string.Format(SuccessfullyImportedSeller, sellerToAdd.Name, sellerToAdd.BoardgamesSellers.Count));
+            }
+            context.Sellers.AddRange(sellers);
+            context.SaveChanges();
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)
