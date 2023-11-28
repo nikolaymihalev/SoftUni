@@ -2,6 +2,7 @@
 {
     using Boardgames.Data;
     using Boardgames.DataProcessor.ExportDto;
+    using Newtonsoft.Json;
     using System.Text;
     using System.Xml.Serialization;
 
@@ -41,7 +42,31 @@
 
         public static string ExportSellersWithMostBoardgames(BoardgamesContext context, int year, double rating)
         {
-            throw new NotImplementedException();
+            var sellers = context.Sellers
+               .Where(s => s.BoardgamesSellers.Any(b => b.Boardgame.YearPublished >= year && b.Boardgame.Rating <= rating))
+               .Select(s => new ExportSellersDTO
+               {
+                   Name = s.Name,
+                   Website = s.Website,
+                   Boardgames = s.BoardgamesSellers
+                               .Where(b => b.Boardgame.YearPublished >= year && b.Boardgame.Rating <= rating)
+                               .ToArray()
+                               .OrderByDescending(b => b.Boardgame.Rating)
+                               .ThenBy(b => b.Boardgame.Name)
+                               .Select(b => new ExportSellerBoardgamesDTO
+                               {
+                                   Name = b.Boardgame.Name,
+                                   Rating = b.Boardgame.Rating,
+                                   Mechanics = b.Boardgame.Mechanics,
+                                   Category = b.Boardgame.CategoryType.ToString()
+                               }).ToArray()
+               })
+               .OrderByDescending(s => s.Boardgames.Count())
+               .ThenBy(s => s.Name)
+               .Take(5)
+               .ToArray();
+
+            return JsonConvert.SerializeObject(sellers, Formatting.Indented);
         }
     }
 }
