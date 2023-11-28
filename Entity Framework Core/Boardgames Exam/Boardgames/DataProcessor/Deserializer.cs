@@ -1,8 +1,13 @@
 ﻿namespace Boardgames.DataProcessor
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Text;
+    using System.Xml.Serialization;
     using Boardgames.Data;
-   
+    using Boardgames.Data.Models;
+    using Boardgames.Data.Models.Enums;
+    using Boardgames.DataProcessor.ImportDto;
+
     public class Deserializer
     {
         private const string ErrorMessage = "Invalid data!";
@@ -15,7 +20,54 @@
 
         public static string ImportCreators(BoardgamesContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ImportCreatorDTO[]), new XmlRootAttribute("Creators"));
+
+            using StringReader stream = new StringReader(xmlString);
+            ImportCreatorDTO[] importCreatorDTOs = (ImportCreatorDTO[])xmlSerializer.Deserialize(stream);
+
+            List<Creator> creators = new List<Creator>();
+
+            foreach (var creator in importCreatorDTOs)
+            {
+                if (!IsValid(creator))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Creator creatorToAdd = new Creator()
+                {
+                    FirstName = creator.FirstName,
+                    LastName = creator.LastName,
+                };
+
+                foreach (ImportBoardgameDTO boardgameDTO in creator.Boardgames)
+                {
+                    if (!IsValid(boardgameDTO))
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    Boardgame boardgame = new Boardgame()
+                    {
+                        Name = boardgameDTO.Name,
+                        Rating = boardgameDTO.Rating,
+                        YearPublished = boardgameDTO.YearPublished,
+                        CategoryType = (CategoryType)boardgameDTO.CategoryType,
+                        Mechanics = boardgameDTO.Mechanics
+                    };
+
+                    creatorToAdd.Boardgames.Add(boardgame);
+                }
+                creators.Add(creatorToAdd);
+                sb.AppendLine(string.Format(SuccessfullyImportedCreator, creatorToAdd.FirstName, creatorToAdd.LastName, creatorToAdd.Boardgames.Count));
+            }
+            context.AddRange(creators);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string ImportSellers(BoardgamesContext context, string jsonString)
