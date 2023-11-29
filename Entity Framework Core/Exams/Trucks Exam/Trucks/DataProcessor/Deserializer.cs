@@ -4,6 +4,7 @@
     using System.Text;
     using System.Xml.Serialization;
     using Data;
+    using Newtonsoft.Json;
     using Trucks.Data.Models;
     using Trucks.Data.Models.Enums;
     using Trucks.DataProcessor.ImportDto;
@@ -75,7 +76,49 @@
         }
         public static string ImportClient(TrucksContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            ImportClientDTO[] importClientDTOs = JsonConvert.DeserializeObject<ImportClientDTO[]>(jsonString);
+
+            List<Client> clients = new List<Client>();
+
+            foreach (var dto in importClientDTOs) 
+            {
+                if (!IsValid(dto)) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Client clientToAdd = new Client() 
+                {
+                    Name = dto.Name,
+                    Nationality = dto.Nationality,
+                    Type = dto.Type
+                };
+
+
+                foreach(int id in dto.Trucks.Distinct()) 
+                {
+                    Truck truck = context.Trucks.First(x => x.Id == id);
+                    if (truck == null) 
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    clientToAdd.ClientsTrucks.Add(new ClientTruck() { Truck = truck });
+                }
+
+                clients.Add(clientToAdd);
+                sb.AppendLine(string.Format(SuccessfullyImportedClient, clientToAdd.Name, clientToAdd.ClientsTrucks.Count));
+            }
+
+
+            context.Clients.AddRange(clients);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)
