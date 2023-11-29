@@ -25,13 +25,22 @@
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(ImportDespatchersDTO[]),new XmlRootAttribute("Despatchers"));
 
             using StringReader stream = new StringReader(xmlString);
-            ImportDespatchersDTO[] importDespatchersDTOs = xmlSerializer.Deserialize(stream) as ImportDespatchersDTO[];
+            ImportDespatchersDTO[] importDespatchersDTOs = (ImportDespatchersDTO[])xmlSerializer.Deserialize(stream);
 
             List<Despatcher> despatchers = new List<Despatcher>();
 
             foreach (var dto in importDespatchersDTOs) 
             {
-                if (!IsValid(dto)||string.IsNullOrEmpty(dto.Position)) 
+                if (!IsValid(dto)) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                string position = dto.Position;
+                bool isPositionInvalid = string.IsNullOrEmpty(position);
+
+                if (isPositionInvalid)
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
@@ -40,7 +49,7 @@
                 Despatcher despatcherToAdd = new Despatcher() 
                 {
                     Name = dto.Name,
-                    Position = dto.Position
+                    Position = position
                 };
 
                 foreach (var truckDto in dto.Trucks) 
@@ -97,8 +106,13 @@
                     Type = dto.Type
                 };
 
+                if (dto.Type == "usual")
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
 
-                foreach(int id in dto.Trucks.Distinct()) 
+                foreach (int id in dto.Trucks.Distinct()) 
                 {
                     Truck truck = context.Trucks.First(x => x.Id == id);
                     if (truck == null) 

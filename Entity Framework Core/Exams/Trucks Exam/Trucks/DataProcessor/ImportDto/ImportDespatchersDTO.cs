@@ -14,7 +14,7 @@ namespace Trucks.DataProcessor.ImportDto
         [Required]
         [MinLength(2)]
         [MaxLength(40)]
-        public string Name { get; set; } = null!;
+        public string Name { get; set; }
         public string Position { get; set; }
 
         public ImportTruckDTO[] Trucks { get; set; }
