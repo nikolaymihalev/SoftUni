@@ -6,6 +6,7 @@
     using System.Text;
     using System.Xml.Serialization;
     using Trucks.DataProcessor.ExportDto;
+    using Newtonsoft.Json;
 
     public class Serializer
     {
@@ -39,7 +40,35 @@
 
         public static string ExportClientsWithMostTrucks(TrucksContext context, int capacity)
         {
-            throw new NotImplementedException();
+            var clients = context
+                .Clients
+                .Where(c => c.ClientsTrucks.Any(ct => ct.Truck.TankCapacity >= capacity))
+                .ToArray()
+                .Select(c => new
+                {
+                    c.Name,
+                    Trucks = c.ClientsTrucks
+                        .Where(ct => ct.Truck.TankCapacity >= capacity)
+                        .ToArray()
+                        .OrderBy(ct => ct.Truck.MakeType.ToString())
+                        .ThenByDescending(ct => ct.Truck.CargoCapacity)
+                        .Select(ct => new
+                        {
+                            TruckRegistrationNumber = ct.Truck.RegistrationNumber,
+                            VinNumber = ct.Truck.VinNumber,
+                            TankCapacity = ct.Truck.TankCapacity,
+                            CargoCapacity = ct.Truck.CargoCapacity,
+                            CategoryType = ct.Truck.CategoryType.ToString(),
+                            MakeType = ct.Truck.MakeType.ToString()
+                        })
+                        .ToArray()
+                })
+                .OrderByDescending(c => c.Trucks.Length)
+                .ThenBy(c => c.Name)
+                .Take(10)
+                .ToArray();
+
+            return JsonConvert.SerializeObject(clients, Formatting.Indented);
         }
     }
 }
