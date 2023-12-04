@@ -19,7 +19,7 @@ namespace Medicines.DataProcessor.ImportDtos
 
         [Required]
         [Range(0.01,1000.00)]
-        public decimal Price { get; set; }
+        public double Price { get; set; }
 
         [Required]
         public string ProductionDate { get; set; }
