@@ -146,7 +146,7 @@
                     counter++;
                 }
                 pharmacies.Add(pharmacyToAdd);
-                sb.AppendLine(string.Format(SuccessfullyImportedPharmacy, dto.Name, counter));
+                sb.AppendLine(string.Format(SuccessfullyImportedPharmacy, pharmacyToAdd.Name, pharmacyToAdd.Medicines.Count));
             }
             context.Pharmacies.AddRange(pharmacies);
             context.SaveChanges();
