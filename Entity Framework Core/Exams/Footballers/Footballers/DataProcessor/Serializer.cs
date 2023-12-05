@@ -52,6 +52,9 @@
                     Name = t.Name,
                     Footballers = t.TeamsFootballers
                                 .Where(f => f.Footballer.ContractStartDate >= date)
+                                .ToArray()
+                                .OrderByDescending(tf => tf.Footballer.ContractEndDate)
+                                .ThenBy(tf => tf.Footballer.Name)
                                 .Select(f=>new 
                                 {
                                     FootballerName = f.Footballer.Name,
@@ -60,8 +63,6 @@
                                     BestSkillType = f.Footballer.BestSkillType.ToString(),
                                     PositionType = f.Footballer.PositionType.ToString()
                                 })
-                                .OrderByDescending(f=>f.ContractEndDate)
-                                .ThenBy(f => f.FootballerName)
                                 .ToArray()                    
                 })
                 .OrderByDescending(t=>t.Footballers.Length)
