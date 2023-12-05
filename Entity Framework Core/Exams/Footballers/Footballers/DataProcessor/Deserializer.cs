@@ -142,7 +142,7 @@
 
                 foreach (var id in dto.Footballers.Distinct())
                 {
-                    Footballer footballer = context.Footballers.First(x => x.Id == id);
+                    Footballer footballer = context.Footballers.Find(id);
 
                     if (footballer == null)
                     {
