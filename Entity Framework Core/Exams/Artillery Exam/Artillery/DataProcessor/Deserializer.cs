@@ -1,6 +1,7 @@
 ﻿namespace Artillery.DataProcessor
 {
     using Artillery.Data;
+    using System.ComponentModel.DataAnnotations;
 
     public class Deserializer
     {
