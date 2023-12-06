@@ -153,9 +153,46 @@
 
         public static string ImportProducts(InvoicesContext context, string jsonString)
         {
+            StringBuilder sb = new StringBuilder();
 
+            ImportProductDto[] importProductDtos = JsonConvert.DeserializeObject<ImportProductDto[]>(jsonString);
+            List<Product> products = new List<Product>();
 
-            throw new NotImplementedException();
+            foreach(var dto in importProductDtos) 
+            {
+                if (!IsValid(dto)) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Product product = new Product 
+                {
+                    Name = dto.Name,
+                    Price = (decimal)dto.Price,
+                    CategoryType = (CategoryType)dto.CategoryType
+                };
+
+                foreach (int id in dto.Clients.Distinct()) 
+                {
+                    Client client = context.Clients.Find(id);
+                    if (client == null) 
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    product.ProductsClients.Add(new ProductClient { Client = client});
+                }
+
+                products.Add(product);
+                sb.AppendLine(string.Format(SuccessfullyImportedProducts,product.Name,product.ProductsClients.Count));
+            }
+
+            context.Products.AddRange(products);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         public static bool IsValid(object dto)
