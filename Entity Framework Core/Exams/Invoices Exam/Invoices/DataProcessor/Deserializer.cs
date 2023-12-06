@@ -96,36 +96,8 @@
                     sb.AppendLine(ErrorMessage);
                     continue;
                 }
-
-                DateTime issueDate;
-                bool isIssueDateValid = DateTime.TryParseExact(
-                    dto.IssueDate, 
-                    "yyyy-MM-dd", 
-                    CultureInfo.InvariantCulture, 
-                    DateTimeStyles.None,
-                    out issueDate);
-
-                if (!isIssueDateValid) 
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
-                DateTime dueDate;
-                bool isDueDateValid = DateTime.TryParseExact(
-                    dto.DueDate,
-                    "yyyy-MM-dd",
-                    CultureInfo.InvariantCulture,
-                    DateTimeStyles.None,
-                    out dueDate);
-
-                if (!isDueDateValid)
-                {
-                    sb.AppendLine(ErrorMessage);
-                    continue;
-                }
-
-                if (issueDate>dueDate) 
+                if (dto.DueDate == DateTime.ParseExact("01/01/0001", "dd/MM/yyyy", CultureInfo.InvariantCulture) 
+                    || dto.IssueDate == DateTime.ParseExact("01/01/0001", "dd/MM/yyyy", CultureInfo.InvariantCulture))
                 {
                     sb.AppendLine(ErrorMessage);
                     continue;
@@ -134,12 +106,17 @@
                 Invoice invoice = new Invoice
                 {
                     Number = dto.Number,
-                    IssueDate = issueDate,
-                    DueDate = dueDate,
+                    IssueDate = dto.IssueDate,
+                    DueDate = dto.DueDate,
                     Amount = (decimal)dto.Amount,
                     CurrencyType = (CurrencyType)dto.CurrencyType,
                     ClientId = dto.ClientId
                 };
+                if (invoice.IssueDate > invoice.DueDate)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
 
                 invoices.Add(invoice);
                 sb.AppendLine(string.Format(SuccessfullyImportedInvoices,invoice.Number));

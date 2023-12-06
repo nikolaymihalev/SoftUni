@@ -10,13 +10,14 @@ namespace Invoices.DataProcessor.ImportDto
     public class ImportInvoiceDto
     {
         [Required]
+        [Range(1_000_000_000, 1_500_000_000)]
         public int Number { get; set; }
 
         [Required]
-        public string IssueDate { get; set; }
+        public DateTime IssueDate { get; set; }
 
         [Required]
-        public string DueDate { get; set; }
+        public DateTime DueDate { get; set; }
 
         [Required]
         public double Amount { get; set; }
