@@ -24,7 +24,59 @@
 
         public static string ImportClients(InvoicesContext context, string xmlString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ImportClientDto[]), new XmlRootAttribute("Clients"));
+            using StringReader reader = new StringReader(xmlString);
+
+            ImportClientDto[] importClientDtos = xmlSerializer.Deserialize(reader) as ImportClientDto[];
+            List<Client> clients = new List<Client>();
+
+            foreach (var dto in importClientDtos)
+            {
+                if (!IsValid(dto))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Client client = new Client()
+                {
+                    Name = dto.Name,
+                    NumberVat = dto.NumberVat
+                };
+
+                foreach (var address in dto.Addresses)
+                {
+                    if (!IsValid(address))
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    if (string.IsNullOrEmpty(address.StreetName))
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    client.Addresses.Add(new Address
+                    {
+                        StreetName = address.StreetName,
+                        StreetNumber = address.StreetNumber,
+                        PostCode = address.PostCode,
+                        City = address.City,
+                        Country = address.Country
+                    });
+                }
+                clients.Add(client);
+                sb.AppendLine(string.Format(SuccessfullyImportedClients, client.Name));
+            }
+
+            context.Clients.AddRange(clients);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
 
