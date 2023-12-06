@@ -1,10 +1,12 @@
 ﻿namespace Invoices.DataProcessor
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Globalization;
     using System.Text;
     using System.Xml.Serialization;
     using Invoices.Data;
     using Invoices.Data.Models;
+    using Invoices.Data.Models.Enums;
     using Invoices.DataProcessor.ImportDto;
     using Newtonsoft.Json;
 
@@ -82,7 +84,71 @@
 
         public static string ImportInvoices(InvoicesContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            ImportInvoiceDto[] importInvoiceDtos = JsonConvert.DeserializeObject<ImportInvoiceDto[]>(jsonString);
+            List<Invoice> invoices = new List<Invoice>();
+
+            foreach (var dto in importInvoiceDtos)
+            {
+                if (!IsValid(dto)) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                DateTime issueDate;
+                bool isIssueDateValid = DateTime.TryParseExact(
+                    dto.IssueDate, 
+                    "yyyy-MM-dd", 
+                    CultureInfo.InvariantCulture, 
+                    DateTimeStyles.None,
+                    out issueDate);
+
+                if (!isIssueDateValid) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                DateTime dueDate;
+                bool isDueDateValid = DateTime.TryParseExact(
+                    dto.DueDate,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out dueDate);
+
+                if (!isDueDateValid)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                if (issueDate>dueDate) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Invoice invoice = new Invoice
+                {
+                    Number = dto.Number,
+                    IssueDate = issueDate,
+                    DueDate = dueDate,
+                    Amount = (decimal)dto.Amount,
+                    CurrencyType = (CurrencyType)dto.CurrencyType,
+                    ClientId = dto.ClientId
+                };
+
+                invoices.Add(invoice);
+                sb.AppendLine(string.Format(SuccessfullyImportedInvoices,invoice.Number));
+            }
+
+            context.Invoices.AddRange(invoices);
+            context.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string ImportProducts(InvoicesContext context, string jsonString)
