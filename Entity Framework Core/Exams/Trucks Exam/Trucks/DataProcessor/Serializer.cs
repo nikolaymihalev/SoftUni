@@ -3,12 +3,45 @@
     using Data;
     using Microsoft.EntityFrameworkCore;
     using Newtonsoft.Json;
+    using System.Text;
+    using System.Xml.Serialization;
+    using Trucks.DataProcessor.ExportDto;
 
     public class Serializer
     {
         public static string ExportDespatchersWithTheirTrucks(TrucksContext context)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ExportDespatcherDto[]), new XmlRootAttribute("Despatchers"));
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+            
+            using StringWriter sw = new StringWriter(sb);
+
+            var despatchers = context.Despatchers.AsNoTracking()
+                .Where(d=>d.Trucks.Any())
+                .Select(d=>new ExportDespatcherDto 
+                {
+                    DespatcherName = d.Name,
+                    TrucksCount = d.Trucks.Count(),
+                    Trucks = d.Trucks
+                            .OrderBy(t=>t.RegistrationNumber)
+                            .ToArray()
+                            .Select(t=>new ExportTruckDto 
+                            {
+                                RegistrationNumber = t.RegistrationNumber,
+                                Make = t.MakeType.ToString()
+                            })
+                            .ToArray()
+                })
+                .OrderByDescending(d=>d.TrucksCount)
+                .ThenBy(d=>d.DespatcherName)
+                .ToArray();
+
+            xmlSerializer.Serialize(sw, despatchers, ns);
+
+            return sb.ToString().TrimEnd();
         }
 
         public static string ExportClientsWithMostTrucks(TrucksContext context, int capacity)
