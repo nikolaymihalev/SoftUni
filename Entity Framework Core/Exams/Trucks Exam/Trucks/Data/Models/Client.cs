@@ -17,7 +17,7 @@ namespace Trucks.Data.Models
         
         [Required]
         public string Nationality { get; set; }
-        
+
         [Required]
         public string Type { get; set; }
 

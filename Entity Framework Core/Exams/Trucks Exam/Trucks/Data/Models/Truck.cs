@@ -13,12 +13,11 @@ namespace Trucks.Data.Models
     {
         [Key]
         public int Id { get; set; }
-        
+
         public string RegistrationNumber { get; set; }
 
         [Required]
         public string VinNumber { get; set; }
-
         public int TankCapacity { get; set; }
         public int CargoCapacity { get; set; }
 

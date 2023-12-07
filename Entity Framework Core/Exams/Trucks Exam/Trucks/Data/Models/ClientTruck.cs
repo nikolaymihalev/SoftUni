@@ -13,13 +13,13 @@ namespace Trucks.Data.Models
         [Required]
         public int ClientId { get; set; }
 
+        [ForeignKey(nameof(ClientId))]
+        public Client Client { get; set; }
+        
         [Required]
         public int TruckId { get; set; }
 
         [ForeignKey(nameof(TruckId))]
         public Truck Truck { get; set; }
-
-        [ForeignKey(nameof(ClientId))]
-        public Client Client { get; set; }
     }
 }
