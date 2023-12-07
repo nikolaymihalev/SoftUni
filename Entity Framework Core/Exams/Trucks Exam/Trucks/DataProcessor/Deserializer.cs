@@ -115,7 +115,7 @@
                         continue;
                     }
 
-                    client.ClientsTrucks.Add(new ClientTruck { Client = client ,Truck = truck });
+                    client.ClientsTrucks.Add(new ClientTruck { Truck = truck });
                 }
 
                 clients.Add(client);
