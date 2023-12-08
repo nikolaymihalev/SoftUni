@@ -71,8 +71,48 @@
 
         public static string ImportInvoices(InvoicesContext context, string jsonString)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+            InvoiceImportDto[] invoicesDtos = JsonConvert.DeserializeObject<InvoiceImportDto[]>(jsonString);
+
+            List<Invoice> invoices = new List<Invoice>();
+
+            foreach (InvoiceImportDto invoiceDto in invoicesDtos)
+            {
+                if (!IsValid(invoiceDto))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                if (invoiceDto.DueDate == DateTime.ParseExact("01/01/0001", "dd/MM/yyyy", CultureInfo.InvariantCulture) || invoiceDto.IssueDate == DateTime.ParseExact("01/01/0001", "dd/MM/yyyy", CultureInfo.InvariantCulture))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+                Invoice i = new Invoice()
+                {
+                    Number = invoiceDto.Number,
+                    IssueDate = invoiceDto.IssueDate,
+                    DueDate = invoiceDto.DueDate,
+                    CurrencyType = invoiceDto.CurrencyType,
+                    Amount = invoiceDto.Amount,
+                    ClientId = invoiceDto.ClientId
+                };
+
+                if (i.IssueDate > i.DueDate)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                invoices.Add(i);
+                sb.AppendLine(String.Format(SuccessfullyImportedInvoices, i.Number));
+            }
+            context.Invoices.AddRange(invoices);
+            context.SaveChanges();
+            return sb.ToString().TrimEnd();
         }
+
 
         public static string ImportProducts(InvoicesContext context, string jsonString)
         {
