@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using static Invoices.Shared.GlobalConstants;
 
 namespace Invoices.Data.Models
 {
@@ -13,13 +10,17 @@ namespace Invoices.Data.Models
         public int Id { get; set; }
 
         [Required]
-        public string Name { get; set; }
+        [StringLength(ClientNameMaxLength)]
+        public string Name { get; set; } = null!;
 
         [Required]
-        public string NumberVat { get; set; }
+        [StringLength(ClientNumberVatMaxLength)]
+        public string NumberVat { get; set; } = null!;
+
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
+
+        public ICollection<ProductClient> ProductsClients { get; set; } = new List<ProductClient>();
 
         public ICollection<Invoice> Invoices { get; set; } = new List<Invoice>();
-        public ICollection<Address> Addresses { get; set; } = new List<Address>();
-        public ICollection<ProductClient> ProductsClients { get; set; } = new List<ProductClient>();
     }
 }
