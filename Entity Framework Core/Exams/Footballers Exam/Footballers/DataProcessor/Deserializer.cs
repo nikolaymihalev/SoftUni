@@ -105,7 +105,52 @@
 
         public static string ImportTeams(FootballersContext context, string jsonString)
         {
-            throw new NotImplementedException();
+           StringBuilder sb = new StringBuilder();
+            ImportTeamDto[] teamDtos = JsonConvert.DeserializeObject<ImportTeamDto[]>(jsonString);
+
+            List<Team> teams = new List<Team>();
+
+            foreach (ImportTeamDto teamDto in teamDtos)
+            {
+                if (!IsValid(teamDto))
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                Team t = new Team()
+                {
+                    Name = teamDto.Name,
+                    Nationality = teamDto.Nationality,
+                    Trophies = teamDto.Trophies,
+                };
+
+                if (t.Trophies == 0)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                foreach (int footballerId in teamDto.Footballers.Distinct())
+                {
+                    Footballer f = context.Footballers.Find(footballerId);
+                    if (f == null)
+                    {
+                        sb.AppendLine(ErrorMessage);
+                        continue;
+                    }
+
+                    t.TeamsFootballers.Add(new TeamFootballer()
+                    {
+                        Footballer = f
+                    });
+                }
+                teams.Add(t);
+                sb.AppendLine(String.Format(SuccessfullyImportedTeam, t.Name, t.TeamsFootballers.Count));
+            }
+            context.Teams.AddRange(teams);
+            context.SaveChanges();
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)
