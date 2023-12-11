@@ -114,7 +114,72 @@
 
         public static string ImportCitizens(CadastreContext dbContext, string jsonDocument)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            ImportCitizensDto[] importCitizensDtos = JsonConvert.DeserializeObject<ImportCitizensDto[]>(jsonDocument);
+            List<Citizen> citizens = new List<Citizen>();
+
+            foreach (var dto in importCitizensDtos) 
+            {
+                if (!IsValid(dto)) 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                if (dto.MaritalStatus != "Unmarried" &&
+                    dto.MaritalStatus!= "Married" &&
+                    dto.MaritalStatus != "Divorced" &&
+                    dto.MaritalStatus != "Widowed") 
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                DateTime birthDate;
+                bool isDateValid = DateTime.TryParseExact(
+                    dto.BirthDate,
+                    "dd-MM-yyyy",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out birthDate);
+                if (!isDateValid)
+                {
+                    sb.AppendLine(ErrorMessage);
+                    continue;
+                }
+
+                MaritalStatus maritalStatus=MaritalStatus.Unmarried;
+
+                switch (dto.MaritalStatus) 
+                {
+                    case "Unmarried":maritalStatus=MaritalStatus.Unmarried; break;
+                    case "Married": maritalStatus=MaritalStatus.Married; break;
+                    case "Divorced": maritalStatus=MaritalStatus.Divorced; break;
+                    case "Widowed": maritalStatus=MaritalStatus.Widowed; break;
+                }
+
+                Citizen citizen = new Citizen() 
+                {
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    BirthDate = birthDate,
+                    MaritalStatus = maritalStatus
+                };
+
+                foreach (int id in dto.Properties) 
+                {
+                    citizen.PropertiesCitizens.Add(new PropertyCitizen { PropertyId = id , Citizen = citizen});
+                }
+
+                sb.AppendLine(string.Format(SuccessfullyImportedCitizen, citizen.FirstName, citizen.LastName, citizen.PropertiesCitizens.Count));
+                citizens.Add(citizen);
+            }
+
+            dbContext.Citizens.AddRange(citizens);
+            dbContext.SaveChanges();
+
+            return sb.ToString().TrimEnd();
         }
 
         private static bool IsValid(object dto)
