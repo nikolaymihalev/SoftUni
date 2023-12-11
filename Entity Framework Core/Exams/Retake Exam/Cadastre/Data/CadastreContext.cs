@@ -13,6 +13,10 @@
         {
             
         }
+        public DbSet<District> Districts { get; set; }
+        public DbSet<Property> Properties { get; set; }
+        public DbSet<Citizen> Citizens { get; set; }
+        public DbSet<PropertyCitizen> PropertiesCitizens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -24,6 +28,7 @@
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<PropertyCitizen>().HasKey(pc => new { pc.PropertyId, pc.CitizenId });
         }
     }
 }
