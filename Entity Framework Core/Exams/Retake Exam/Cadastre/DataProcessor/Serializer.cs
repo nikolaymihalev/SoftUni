@@ -40,7 +40,29 @@ namespace Cadastre.DataProcessor
 
         public static string ExportFilteredPropertiesWithDistrict(CadastreContext dbContext)
         {
-            throw new NotImplementedException();
+            StringBuilder sb = new StringBuilder();
+
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(ExportPropertyDto[]), new XmlRootAttribute("Properties"));
+            XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+            ns.Add(string.Empty, string.Empty);
+
+            using StringWriter sw = new StringWriter(sb);
+
+            var properties = dbContext.Properties.AsNoTracking()
+                .Where(x=>x.Area>=100)
+                .OrderByDescending(x => x.Area)
+                .ThenBy(x => x.DateOfAcquisition)
+                .Select(x=> new ExportPropertyDto 
+                {
+                    PropertyIdentifier = x.PropertyIdentifier,
+                    Area = x.Area.ToString(),
+                    DateOfAcquisition = x.DateOfAcquisition.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    PostalCode = x.District.PostalCode
+                })                
+                .ToArray();
+            xmlSerializer.Serialize(sw, properties, ns);
+
+            return sb.ToString().TrimEnd();
         }
     }
 }
