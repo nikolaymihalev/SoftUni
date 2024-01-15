@@ -28,5 +28,11 @@ namespace HttpBasic.Controllers
         {
             return View();
         }
+
+        [HttpPatch]
+        public IActionResult UpdateItemQuantity(int id, int quantity)
+        {
+            return View();
+        }
     }
 }
