@@ -18,6 +18,12 @@ namespace HttpBasic.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult MyFirstAction(int id, string status, string label)
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
