@@ -34,5 +34,11 @@ namespace HttpBasic.Controllers
         {
             return View();
         }
+
+        [HttpDelete]
+        public IActionResult DeleteItem(int id)
+        {
+            return View();
+        }
     }
 }
