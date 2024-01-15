@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HttpBasic.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HttpBasic.Controllers
 {
@@ -9,8 +10,21 @@ namespace HttpBasic.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult AddItem() 
+        public IActionResult AddItem(Item model) 
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditItem(int id)
+        {
+            return View();
+        }
+
+        [HttpPut]
+        public IActionResult EditItem(Item model)
         {
             return View();
         }
