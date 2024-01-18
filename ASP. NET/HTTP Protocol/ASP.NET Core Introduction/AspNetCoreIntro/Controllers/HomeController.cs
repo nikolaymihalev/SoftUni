@@ -18,7 +18,7 @@ namespace AspNetCoreIntro.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Privacy(int? id)
         {
             return View();
         }
