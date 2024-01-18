@@ -8,5 +8,11 @@ namespace AspNetCoreIntro.Controllers
         {
             return View();
         }
+
+        public IActionResult GetNumber(int number) 
+        {
+            ViewBag.Title = "GetNumber";
+            return View("Number",number);
+        }
     }
 }
