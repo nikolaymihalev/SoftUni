@@ -5,7 +5,7 @@ namespace MVCInroDemo.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IEnumerable<ProductViewModel> products = new List<ProductViewModel>() 
+        private readonly List<ProductViewModel> products = new List<ProductViewModel>() 
         {
             new ProductViewModel()
             {
@@ -24,6 +24,17 @@ namespace MVCInroDemo.Controllers
         public IActionResult Index()
         {
             return View(products);
+        }
+
+        public IActionResult ById(int id)
+        {
+            if (id < 0 || id >= products.Count) 
+            {
+                TempData["Error"] = "No such product";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(products[id]);
         }
     }
 }
