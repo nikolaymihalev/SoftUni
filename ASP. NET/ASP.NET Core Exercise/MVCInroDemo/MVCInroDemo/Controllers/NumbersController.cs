@@ -13,7 +13,13 @@ namespace MVCInroDemo.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(50);
+        }
+
+        [HttpGet]
+        public IActionResult Limit(int numb) 
+        {
+            return View("Index",numb);
         }
     }
 }
