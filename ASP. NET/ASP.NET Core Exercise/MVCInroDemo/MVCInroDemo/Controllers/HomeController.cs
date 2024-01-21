@@ -27,6 +27,7 @@ namespace MVCInroDemo.Controllers
 
         public IActionResult About()
         {
+            ViewBag.Message = "This is an ASP.NET Core MVC";
             return View();
         }
 
