@@ -15,10 +15,17 @@ namespace MVCInroDemo.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Message = "Welcome to the MVC";
+
             return View();
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult About()
         {
             return View();
         }
