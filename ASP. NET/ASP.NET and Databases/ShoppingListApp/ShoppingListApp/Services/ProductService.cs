@@ -1,4 +1,5 @@
-﻿using ShoppingListApp.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoppingListApp.Contracts;
 using ShoppingListApp.Data;
 using ShoppingListApp.Models;
 
@@ -23,9 +24,14 @@ namespace ShoppingListApp.Services
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<ProductViewModel>> GetAllAsync()
+        public async Task<IEnumerable<ProductViewModel>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await context.Products.AsNoTracking()
+                .Select(p=> new ProductViewModel() 
+                { 
+                    Id = p.Id, 
+                    Name= p.Name})
+                .ToListAsync();
         }
 
         public Task<ProductViewModel> GetByIdAsync(int id)
