@@ -60,5 +60,13 @@ namespace ShoppingListApp.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id) 
+        {
+            await productService.DeleteProductAsync(id);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

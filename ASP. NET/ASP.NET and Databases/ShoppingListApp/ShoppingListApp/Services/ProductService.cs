@@ -26,9 +26,17 @@ namespace ShoppingListApp.Services
             await context.SaveChangesAsync();
         }
 
-        public Task DeleteProductAsync(int id)
+        public async Task DeleteProductAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await context.Products.FindAsync(id);
+
+            if (entity == null)
+            {
+                throw new ArgumentException("Invalid product");
+            }
+
+            context.Products.Remove(entity);
+            await context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<ProductViewModel>> GetAllAsync()
