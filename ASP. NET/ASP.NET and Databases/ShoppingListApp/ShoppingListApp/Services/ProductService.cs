@@ -41,14 +41,34 @@ namespace ShoppingListApp.Services
                 .ToListAsync();
         }
 
-        public Task<ProductViewModel> GetByIdAsync(int id)
+        public async Task<ProductViewModel> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await context.Products.FindAsync(id);
+
+            if (entity == null) 
+            {
+                throw new ArgumentException("Invalid product");
+            }
+
+            return new ProductViewModel() 
+            {
+                Id = id,
+                Name = entity.Name
+            };
         }
 
-        public Task UpdateProductAsync(ProductViewModel product)
+        public async Task UpdateProductAsync(ProductViewModel product)
         {
-            throw new NotImplementedException();
+            var entity = await context.Products.FindAsync(product.Id);
+
+            if (entity == null)
+            {
+                throw new ArgumentException("Invalid product");
+            }
+
+            entity.Name = product.Name;
+
+            await context.SaveChangesAsync();
         }
     }
 }
