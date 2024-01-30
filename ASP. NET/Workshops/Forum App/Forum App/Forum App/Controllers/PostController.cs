@@ -19,5 +19,25 @@ namespace Forum_App.Controllers
 
             return View(model);
         }
+
+        [HttpGet]
+        public IActionResult Add() 
+        {
+            var model = new PostDto();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(PostDto model) 
+        {
+            if (ModelState.IsValid == false) 
+            {
+                return View(model);
+            }
+
+            await postService.AddAsync(model);
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

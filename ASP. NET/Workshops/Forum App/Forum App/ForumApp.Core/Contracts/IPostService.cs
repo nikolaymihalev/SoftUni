@@ -10,5 +10,6 @@ namespace ForumApp.Core.Contracts
     public interface IPostService
     {
         Task<IEnumerable<PostDto>> GetAllPostsAsync();
+        Task AddAsync(PostDto model);
     }
 }
