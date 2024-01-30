@@ -1,3 +1,5 @@
+using ForumApp.Core.Contracts;
+using ForumApp.Core.Services;
 using ForumApp.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,8 @@ builder.Services.AddDbContext<ForumDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IPostService, PostService>();
 
 var app = builder.Build();
 
