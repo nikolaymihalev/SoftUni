@@ -3,7 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string connectionString = builder.Configuration.GetConnectionString("Default");
+string connectionString = builder.Configuration.GetConnectionString("Default") ?? 
+    throw new Exception("Connection string not found");
 builder.Services.AddDbContext<ForumDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
