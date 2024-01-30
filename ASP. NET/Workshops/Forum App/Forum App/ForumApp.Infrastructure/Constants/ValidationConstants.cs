@@ -30,5 +30,15 @@ namespace ForumApp.Infrastructure.Constants
         /// Minimul Post Content Length
         /// </summary>
         public const int ContentMinLength = 30;
+
+        /// <summary>
+        /// Require Error Message Text
+        /// </summary>
+        public const string RequireErrorMessage = "The {0} field is required";
+
+        /// <summary>
+        /// String Length Error Message Text
+        /// </summary>
+        public const string StringLengthErrorMessage = "The {0} field must be between {2} and {1} characters long";
     }
 }
