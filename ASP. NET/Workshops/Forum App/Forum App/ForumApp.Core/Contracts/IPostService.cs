@@ -11,5 +11,7 @@ namespace ForumApp.Core.Contracts
     {
         Task<IEnumerable<PostDto>> GetAllPostsAsync();
         Task AddAsync(PostDto model);
+        Task<PostDto?> GetByIdAsync(int id);
+        Task EditAsync(PostDto model);
     }
 }
