@@ -13,5 +13,6 @@ namespace ForumApp.Core.Contracts
         Task AddAsync(PostDto model);
         Task<PostDto?> GetByIdAsync(int id);
         Task EditAsync(PostDto model);
+        Task DeleteAsync(int id);
     }
 }
