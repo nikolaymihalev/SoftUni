@@ -20,7 +20,7 @@ let age = 25;
 let height;
 
 let numArr = [10, 20, 30, 40];
-console.log(numArr[2]);
+
 
 function sum(input){
     let firstNum = input[0];
@@ -30,10 +30,21 @@ function sum(input){
     console.log(firstNum+secondNum+thirdNum);
 }
 
-sum([5,4,"4"]);
+
 
 function parsing(input){
     console.log(parseInt(input));
 }
 
-parsing(2.5);
+
+
+function concatenateData(input){
+    let firstName = input[0];
+    let lastName = input[1];
+    let age = Number(input[2]);
+    let town = input[3];
+
+    console.log(`You are ${firstName} ${lastName}, a ${age}-years old person from ${town}`);
+}
+
+concatenateData(["Ivan", "Petrov", "50", "Shumen"]);
