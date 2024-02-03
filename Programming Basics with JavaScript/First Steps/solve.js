@@ -31,3 +31,9 @@ function sum(input){
 }
 
 sum([5,4,"4"]);
+
+function parsing(input){
+    console.log(parseInt(input));
+}
+
+parsing(2.5);
