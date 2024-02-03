@@ -21,3 +21,12 @@ let height;
 
 let numArr = [10, 20, 30, 40];
 console.log(numArr[2]);
+
+function sum(input){
+    let firstNum = input[0];
+    let secondNum = input[1];
+
+    console.log(firstNum+secondNum);
+}
+
+sum([5,4]);
