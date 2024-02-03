@@ -25,8 +25,9 @@ console.log(numArr[2]);
 function sum(input){
     let firstNum = input[0];
     let secondNum = input[1];
+    let thirdNum = Number(input[2]);
 
-    console.log(firstNum+secondNum);
+    console.log(firstNum+secondNum+thirdNum);
 }
 
-sum([5,4]);
+sum([5,4,"4"]);
