@@ -18,3 +18,6 @@ function printNumbers(){
 let name = "Peshto";
 let age = 25;
 let height;
+
+let numArr = [10, 20, 30, 40];
+console.log(numArr[2]);
