@@ -15,4 +15,6 @@ function printNumbers(){
     console.log("10");
 }
 
-printNumbers();
+let name = "Peshto";
+let age = 25;
+let height;
