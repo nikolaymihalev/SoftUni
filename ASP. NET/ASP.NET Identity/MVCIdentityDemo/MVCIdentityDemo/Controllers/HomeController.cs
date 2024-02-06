@@ -20,6 +20,7 @@ namespace MVCIdentityDemo.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Administrator")]
         public IActionResult Privacy()
         {
             return View();
