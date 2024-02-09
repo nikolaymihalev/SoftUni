@@ -24,6 +24,6 @@ namespace TaskBoard.Models
         public int? BoardId { get; set; }
 
         [Required]
-        public string OwnerId { get; set; } = string.Empty;
+        public string Owner { get; set; } = string.Empty;
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TaskBoard.Data;
+using TaskBoard.Models;
 
 namespace TaskBoard.Controllers
 {
@@ -12,9 +14,26 @@ namespace TaskBoard.Controllers
             data = _data;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var boards = await data.Boards
+                .Select(b => new BoardViewModel()
+                {
+                    Id = b.Id,
+                    Name = b.Name,
+                    Tasks = b.Tasks.Select(t => new TaskViewModel()
+                    {
+                        Id = t.Id,
+                        Title = t.Title,
+                        CreatedOn = DateTime.Now,
+                        Description = t.Description,
+                        Owner = t.Owner.UserName,
+                    })
+                })
+                .ToListAsync();
+
+
+            return View(boards);
         }
     }
 }

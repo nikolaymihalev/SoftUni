@@ -12,6 +12,6 @@ namespace TaskBoard.Models
         [StringLength(DataConstants.Board.NameMaxLength, MinimumLength = DataConstants.Board.NameMinLength)]
         public string Name { get; set; } = string.Empty;
 
-        public IEnumerable<Task> Tasks { get; set; } = new List<Task>();
+        public IEnumerable<TaskViewModel> Tasks { get; set; } = new List<TaskViewModel>();
     }
 }
