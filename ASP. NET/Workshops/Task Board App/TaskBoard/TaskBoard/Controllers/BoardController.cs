@@ -27,7 +27,6 @@ namespace TaskBoard.Controllers
                     {
                         Id = t.Id,
                         Title = t.Title,
-                        CreatedOn = DateTime.Now,
                         Description = t.Description,
                         Owner = t.Owner.UserName,
                     })
