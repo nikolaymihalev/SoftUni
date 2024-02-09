@@ -15,6 +15,8 @@ namespace TaskBoard.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            builder.ApplyConfiguration(new UserConfiguraion());
+            builder.ApplyConfiguration(new BoardConfiguraion());
             builder.ApplyConfiguration(new TaskConfiguration());
 
             base.OnModelCreating(builder);
