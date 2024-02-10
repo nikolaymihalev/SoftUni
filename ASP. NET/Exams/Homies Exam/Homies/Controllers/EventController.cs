@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Homies.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Homies.Data.Constants;
+using System.Globalization;
 
 namespace Homies.Controllers
 {
@@ -110,11 +112,73 @@ namespace Homies.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Add() 
+        {
+            var model = new EventFormViewModel();
+            model.Types = await GetTypes();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(EventFormViewModel model) 
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(model.Start,
+                ValidationConstants.DataFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start)) 
+            {
+                ModelState.AddModelError(nameof(model.Start), $"Invalid date! Format must be: {ValidationConstants.DataFormat}");
+            }
+
+            if (!DateTime.TryParseExact(model.End,
+                ValidationConstants.DataFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState.AddModelError(nameof(model.End), $"Invalid date! Format must be: {ValidationConstants.DataFormat}");
+            }
+
+            if (!ModelState.IsValid) 
+            {
+                model.Types = await GetTypes();
+
+                return View(model);
+            }
+
+            var entity = new Event() 
+            {
+                CreatedOn = DateTime.Now,
+                Description = model.Description,
+                Name = model.Name,
+                OrganiserId = GetUserId(),
+                TypeId = model.TypeId,
+                Start = start,
+                End = end,
+            };
+
+            await context.Events.AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
 
 
         private string GetUserId() 
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
+        }
+
+        private async Task<IEnumerable<TypeViewModel>> GetTypes() 
+        {
+            return await context.Types
+                .Select(t=>new TypeViewModel(t.Id, t.Name))
+                .ToListAsync();
         }
     }
 }
