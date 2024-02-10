@@ -168,6 +168,33 @@ namespace Homies.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id) 
+        {
+            var ev = await context.Events.FindAsync(id);
+
+            if(ev is null) 
+            {
+                return BadRequest();
+            }
+
+            if (ev.OrganiserId != GetUserId()) 
+            {
+                return Unauthorized();
+            }
+
+            var model = new EventFormViewModel()
+            {
+                Description = ev.Description,
+                Name = ev.Name,
+                Start = ev.Start.ToString(ValidationConstants.DataFormat),
+                End = ev.End.ToString(ValidationConstants.DataFormat),
+                TypeId = ev.TypeId,
+                Types = await GetTypes()
+            };
+
+            return View(model);
+        }
 
         private string GetUserId() 
         {
