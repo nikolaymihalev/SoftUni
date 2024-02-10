@@ -196,6 +196,60 @@ namespace Homies.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Edit(EventFormViewModel model, int id) 
+        {
+            var ev = await context.Events.FindAsync(id);
+
+            if (ev is null)
+            {
+                return BadRequest();
+            }
+
+            if (ev.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(model.Start,
+                ValidationConstants.DataFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState.AddModelError(nameof(model.Start), $"Invalid date! Format must be: {ValidationConstants.DataFormat}");
+            }
+
+            if (!DateTime.TryParseExact(model.End,
+                ValidationConstants.DataFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState.AddModelError(nameof(model.End), $"Invalid date! Format must be: {ValidationConstants.DataFormat}");
+            }
+
+            if(!ModelState.IsValid) 
+            {
+                model.Types = await GetTypes();
+
+                return View(model);
+            }
+
+            ev.Start = start;
+            ev.End = end;
+            ev.Description = model.Description;
+            ev.Name = model.Name;
+            ev.TypeId = model.TypeId;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private string GetUserId() 
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
