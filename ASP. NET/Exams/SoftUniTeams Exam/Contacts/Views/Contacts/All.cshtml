@@ -1,8 +1,8 @@
-﻿@{
+﻿@model IEnumerable<ContactInfoViewModel>
+@{
     ViewBag.Title = "All Contacts";
 }
 
-@*
 <h2 class="text-center">@ViewBag.Title</h2>
 <hr />
 
@@ -21,7 +21,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            @foreach (var contact in Model.Contacts)
+            @foreach (var contact in Model)
             {
                 <tr>
                     <th scope="row"></th>
@@ -50,4 +50,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-*@
