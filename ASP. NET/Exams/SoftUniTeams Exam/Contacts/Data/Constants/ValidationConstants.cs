@@ -16,5 +16,8 @@
         
         public const int ContactPhoneMaxLength = 13;
         public const int ContactPhoneMinLength = 10;
+        
+        public const int ContactPasswordMaxLength = 20;
+        public const int ContactPasswordMinLength = 5;
     }
 }
