@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Contacts.Data.Models
@@ -9,12 +10,12 @@ namespace Contacts.Data.Models
         public string ApplicationUserId { get; set; }
 
         [ForeignKey(nameof(ApplicationUserId))]
-        public ApplicationUser ApplicationUser { get; set; } = null!;
+        public IdentityUser ApplicationUser { get; set; } 
 
         [Required]
         public int ContactId { get; set; }
 
         [ForeignKey(nameof(ContactId))]
-        public Contact Contact { get; set; } = null!;
+        public Contact Contact { get; set; } 
     }
 }

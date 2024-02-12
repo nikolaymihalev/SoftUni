@@ -18,6 +18,11 @@ namespace Contacts.Data
         {
             builder.Entity<ApplicationUserContact>().HasKey(x => new { x.ApplicationUserId, x.ContactId });
 
+            builder.Entity<ApplicationUserContact>()
+                .HasOne(x => x.Contact)
+                .WithMany(x => x.ApplicationUsersContacts)
+                .OnDelete(DeleteBehavior.Restrict);
+
             builder
             .Entity<Contact>()
             .HasData(new Contact()
