@@ -5,6 +5,7 @@ namespace Contacts.Models
 {
     public class ContactFormViewModel
     {
+
         [Required(ErrorMessage = ErrorMessageConstants.RequireErrorMessage)]
         [StringLength(ValidationConstants.ContactFirstNameMaxLength,
             MinimumLength = ValidationConstants.ContactFirstNameMinLength,

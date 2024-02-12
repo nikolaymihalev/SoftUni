@@ -145,6 +145,56 @@ namespace Contacts.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int contactId) 
+        {
+            var model = await context.Contacts.FindAsync(contactId);
+
+            if (model is null) 
+            {
+                return BadRequest();
+            }
+
+            var contact = new ContactFormViewModel()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                Website = model.Website,
+            };
+
+            return View(contact);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(ContactFormViewModel model,int contactId) 
+        {
+            var contact = await context.Contacts.FindAsync(contactId);
+
+            if (contact is null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            contact.FirstName = model.FirstName;
+            contact.LastName = model.LastName;
+            contact.Email = model.Email;
+            contact.PhoneNumber = model.PhoneNumber;
+            contact.Address = model.Address;
+            contact.Website = model.Website;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+            
+        }
 
         private string GetUserId() 
         {
