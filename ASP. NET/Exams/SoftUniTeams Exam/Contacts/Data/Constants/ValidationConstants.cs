@@ -19,5 +19,8 @@
         
         public const int ContactPasswordMaxLength = 20;
         public const int ContactPasswordMinLength = 5;
+
+        public const string ContactPhoneRegularExpression = @"\+\d{3}\-\d{3}\-\d{2}\-\d{2}\-\d{2}|0\d{9}";
+        public const string ContactWebsiteRegularExpression = @"www\.\w{1,}\.bg";
     }
 }

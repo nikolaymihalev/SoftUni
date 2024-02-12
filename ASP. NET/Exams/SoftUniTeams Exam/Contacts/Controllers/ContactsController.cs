@@ -114,6 +114,38 @@ namespace Contacts.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Add() 
+        {
+            var model = new ContactFormViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(ContactFormViewModel model) 
+        {
+            if (!ModelState.IsValid) 
+            {
+                return View(model);
+            }
+
+            var contact = new Contact()
+            {
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Address = model.Address,
+                Website = model.Website,
+            };
+
+            await context.AddAsync(contact);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
+
         private string GetUserId() 
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty; 
