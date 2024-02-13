@@ -1,6 +1,7 @@
 ﻿using Library.Data;
 using Library.Data.Models;
 using Library.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
@@ -8,6 +9,7 @@ using System.Security.Claims;
 
 namespace Library.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
         private readonly LibraryDbContext context;
@@ -27,7 +29,7 @@ namespace Library.Controllers
                     x.Title,
                     x.Author,
                     x.ImageUrl,
-                    x.Rating.ToString(),
+                    x.Rating.ToString("f2"),
                     x.Category.Name,
                     x.Description))
                 .ToListAsync();
@@ -110,12 +112,50 @@ namespace Library.Controllers
                     x.Book.Title,
                     x.Book.Author,
                     x.Book.ImageUrl,
-                    x.Book.Rating.ToString(),
+                    x.Book.Rating.ToString("f2"),
                     x.Book.Category.Name,
                     x.Book.Description))
                 .ToListAsync();
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add() 
+        {
+            var model = new BookFormViewModel();
+            model.Categories = await GetCategories();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(BookFormViewModel model) 
+        {
+            if (!ModelState.IsValid) 
+            {
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+
+            var book = new Book() 
+            {
+                Title = model.Title,
+                Author = model.Author,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                Rating = model.Rating,
+                CategoryId = model.CategoryId
+            };
+
+            await context.Books.AddAsync(book);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
+        public async Task<IEnumerable<Category>> GetCategories() 
+        {
+            return await context.Categories.AsNoTracking().ToListAsync();
         }
 
         private string GetUserId()
