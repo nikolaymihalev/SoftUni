@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Library.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace Library.Data
 {
@@ -10,9 +12,22 @@ namespace Library.Data
         {
         }
 
+        public DbSet<Book> Books { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<ApplicationUserBook> ApplicationUsersBooks { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            /* builder
+            builder.Entity<ApplicationUserBook>().HasKey(x => new { x.ApplicationUserId, x.BookId });
+
+            builder.Entity<ApplicationUserBook>()
+                .HasOne(x => x.Book)
+                .WithMany(x => x.ApplicationUsersBooks)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Book>().Property(e => e.Rating).HasPrecision(18, 8);
+
+            builder
                 .Entity<Book>()
                 .HasData(new Book()
                 {
@@ -52,7 +67,7 @@ namespace Library.Data
                     Id = 5,
                     Name = "Fantasy"
                 });
-            */
+            
 
             base.OnModelCreating(builder);
         }
