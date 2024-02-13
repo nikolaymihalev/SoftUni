@@ -42,6 +42,11 @@ namespace Library.Controllers
                 .Include(x => x.ApplicationUsersBooks)
                 .FirstOrDefaultAsync();
 
+            if (model is null) 
+            {
+                return BadRequest();
+            }
+
             string userId = GetUserId();
 
             if (!model.ApplicationUsersBooks.Any(x => x.ApplicationUserId == userId)) 
@@ -57,6 +62,33 @@ namespace Library.Controllers
 
             return RedirectToAction(nameof(All));
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCollection(int bookId) 
+        {
+            var model = await context.Books
+                .FindAsync(bookId);
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            var aui = model.ApplicationUsersBooks.FirstOrDefault(x => x.ApplicationUserId == userId);
+
+            if (aui is null) 
+            {
+                return BadRequest();
+            }
+
+            model.ApplicationUsersBooks.Remove(aui);
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Mine));
         }
 
         private string GetUserId()
