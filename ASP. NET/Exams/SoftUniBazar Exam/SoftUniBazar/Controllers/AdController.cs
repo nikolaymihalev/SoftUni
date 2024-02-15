@@ -167,6 +167,56 @@ namespace SoftUniBazar.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id) 
+        {
+            var model = await context.Ads.FindAsync(id);
+
+            if(model is null) 
+            {
+                return BadRequest();
+            }
+
+            var ad = new AdFormViewModel()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                Price = model.Price,
+                CategoryId = model.CategoryId,
+                Categories = await GetCategories()
+            };
+
+            return View(ad);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(AdFormViewModel model, int id) 
+        {
+            var ad = await context.Ads.FindAsync(id);
+
+            if (ad is null)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid) 
+            {
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+
+            ad.Name = model.Name;
+            ad.Description = model.Description;
+            ad.ImageUrl = model.ImageUrl;
+            ad.Price = model.Price;
+            ad.CategoryId = model.CategoryId;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private async Task<IEnumerable<Category>> GetCategories() 
         {
             return await context.Categories.AsNoTracking().ToListAsync();
