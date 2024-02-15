@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Data;
+using SoftUniBazar.Data.Constants;
 using SoftUniBazar.Data.Models;
 using SoftUniBazar.Models;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace SoftUniBazar.Controllers
                     x.Id,
                     x.Name,
                     x.ImageUrl,
-                    x.CreatedOn.ToString(),
+                    x.CreatedOn.ToString(ValidationConstants.DateFormat),
                     x.Category.Name,
                     x.Description,
                     x.Price.ToString("f2"),
@@ -114,7 +115,7 @@ namespace SoftUniBazar.Controllers
                     x.AdId,
                     x.Ad.Name,
                     x.Ad.ImageUrl,
-                    x.Ad.CreatedOn.ToString(),
+                    x.Ad.CreatedOn.ToString(ValidationConstants.DateFormat),
                     x.Ad.Category.Name,
                     x.Ad.Description,
                     x.Ad.Price.ToString("f2"),
@@ -125,6 +126,51 @@ namespace SoftUniBazar.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Add() 
+        {
+            var model = new AdFormViewModel();
+            model.Categories = await GetCategories();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(AdFormViewModel model) 
+        {
+            if (!ModelState.IsValid) 
+            {
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+
+            string userId = GetUserId();
+
+            if (userId is null) 
+            {
+                return Unauthorized();
+            }
+
+            var entity = new Ad()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                ImageUrl = model.ImageUrl,
+                Price = model.Price,
+                CategoryId = model.CategoryId,
+                CreatedOn = DateTime.Now,
+                OwnerId = userId
+            };
+
+            await context.Ads.AddAsync(entity);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
+        private async Task<IEnumerable<Category>> GetCategories() 
+        {
+            return await context.Categories.AsNoTracking().ToListAsync();
+        }
         private string GetUserId() 
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
