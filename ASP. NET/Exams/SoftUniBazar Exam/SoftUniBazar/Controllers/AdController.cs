@@ -67,6 +67,36 @@ namespace SoftUniBazar.Controllers
             return RedirectToAction(nameof(Cart));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int id) 
+        {
+            var model = await context.Ads
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Include(x => x.AdBuyers)
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            var user = model.AdBuyers.FirstOrDefault(x => x.BuyerId == userId);
+
+            if (user is null) 
+            {
+                return Unauthorized();
+            }
+
+            model.AdBuyers.Remove(user);
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private string GetUserId() 
         {
             return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
