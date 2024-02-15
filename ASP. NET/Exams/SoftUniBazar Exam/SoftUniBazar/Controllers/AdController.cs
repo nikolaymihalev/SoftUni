@@ -2,7 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Data;
+using SoftUniBazar.Data.Models;
 using SoftUniBazar.Models;
+using System.Security.Claims;
 
 namespace SoftUniBazar.Controllers
 {
@@ -33,6 +35,41 @@ namespace SoftUniBazar.Controllers
                 .ToListAsync();                
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int id) 
+        {
+            var model = await context.Ads
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Include(x => x.AdBuyers)
+                .FirstOrDefaultAsync();
+
+            if (model is null) 
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            if (!model.AdBuyers.Any(x => x.BuyerId == userId))
+            {
+                model.AdBuyers.Add(new AdBuyer()
+                {
+                    BuyerId = userId,
+                    AdId = id
+                });
+                
+                await context.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Cart));
+        }
+
+        private string GetUserId() 
+        {
+            return User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? string.Empty;
         }
     }
 }
