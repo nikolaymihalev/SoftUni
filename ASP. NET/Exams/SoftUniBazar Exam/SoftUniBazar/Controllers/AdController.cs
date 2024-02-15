@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using SoftUniBazar.Data;
 using SoftUniBazar.Data.Models;
 using SoftUniBazar.Models;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SoftUniBazar.Controllers
@@ -55,12 +56,15 @@ namespace SoftUniBazar.Controllers
 
             if (!model.AdBuyers.Any(x => x.BuyerId == userId))
             {
-                model.AdBuyers.Add(new AdBuyer()
+                var buyer= new AdBuyer()
                 {
                     BuyerId = userId,
                     AdId = id
-                });
-                
+                };
+
+                model.AdBuyers.Add(buyer);
+
+                await context.AdsBuyers.AddAsync(buyer);
                 await context.SaveChangesAsync();
             }
 
@@ -92,9 +96,33 @@ namespace SoftUniBazar.Controllers
 
             model.AdBuyers.Remove(user);
 
+            context.AdsBuyers.Remove(user);
             await context.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Cart() 
+        {
+            string userId = GetUserId();
+
+            var model = await context.AdsBuyers
+                .AsNoTracking()
+                .Where(x=>x.BuyerId==userId)
+                .Select(x => new AdInfoViewModel(
+                    x.AdId,
+                    x.Ad.Name,
+                    x.Ad.ImageUrl,
+                    x.Ad.CreatedOn.ToString(),
+                    x.Ad.Category.Name,
+                    x.Ad.Description,
+                    x.Ad.Price.ToString("f2"),
+                    x.Ad.Owner.UserName))
+                .ToListAsync();
+
+
+            return View(model);
         }
 
         private string GetUserId() 
