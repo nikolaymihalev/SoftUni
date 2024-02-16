@@ -177,6 +177,88 @@ namespace Homies.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var ev = await context.Events.FindAsync(id);
+
+            if (ev is null)
+            {
+                return BadRequest();
+            }
+
+            if (ev.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            var model = new EventFormViewModel()
+            {
+                Description = ev.Description,
+                Name = ev.Name,
+                Start = ev.Start.ToString(ValidationConstants.DateFormat),
+                End = ev.End.ToString(ValidationConstants.DateFormat),
+                TypeId = ev.TypeId,
+                Types = await GetTypesAsync()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EventFormViewModel model, int id)
+        {
+            var ev = await context.Events.FindAsync(id);
+
+            if (ev is null)
+            {
+                return BadRequest();
+            }
+
+            if (ev.OrganiserId != GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(model.Start,
+                ValidationConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState.AddModelError(nameof(model.Start), $"Invalid date! Format must be: {ValidationConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(model.End,
+                ValidationConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState.AddModelError(nameof(model.End), $"Invalid date! Format must be: {ValidationConstants.DateFormat}");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Types = await GetTypesAsync();
+
+                return View(model);
+            }
+
+            ev.Start = start;
+            ev.End = end;
+            ev.Description = model.Description;
+            ev.Name = model.Name;
+            ev.TypeId = model.TypeId;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         public async Task<IEnumerable<Type>> GetTypesAsync() 
         {
             return await context.Types.AsNoTracking().ToListAsync();
