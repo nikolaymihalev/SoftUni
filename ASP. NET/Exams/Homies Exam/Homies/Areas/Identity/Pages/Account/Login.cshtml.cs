@@ -35,6 +35,7 @@ namespace Homies.Areas.Identity.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -69,6 +70,7 @@ namespace Homies.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -82,6 +84,7 @@ namespace Homies.Areas.Identity.Pages.Account
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
 
             ReturnUrl = returnUrl;
         }

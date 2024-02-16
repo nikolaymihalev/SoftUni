@@ -16,7 +16,6 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequireUppercase = false;
-
 })
     .AddEntityFrameworkStores<HomiesDbContext>();
 builder.Services.AddControllersWithViews();
