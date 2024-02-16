@@ -5,7 +5,9 @@ using Homies.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 using System.Security.Claims;
+using Type = Homies.Data.Models.Type;
 
 namespace Homies.Controllers
 {
@@ -100,6 +102,84 @@ namespace Homies.Controllers
             await context.SaveChangesAsync();
 
             return RedirectToAction(nameof(All));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Joined() 
+        {
+            string userId = GetUserId();
+
+            var model = await context.EventsParticipants
+                .AsNoTracking()
+                .Where(x=>x.HelperId == userId)
+                .Select(x => new EventInfoViewModel(
+                    x.Event.Id,
+                    x.Event.Name,
+                    x.Event.Start.ToString(ValidationConstants.DateFormat),
+                    x.Event.Type.Name,
+                    x.Event.Organiser.UserName))
+                .ToListAsync();
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Add() 
+        {
+            var model = new EventFormViewModel();
+            model.Types = await GetTypesAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(EventFormViewModel model) 
+        {
+            DateTime start = DateTime.Now;
+            DateTime end = DateTime.Now;
+
+            if (!DateTime.TryParseExact(model.Start,
+                ValidationConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out start))
+            {
+                ModelState.AddModelError(nameof(model.Start), $"Invalid date! Format must be: {ValidationConstants.DateFormat}");
+            }
+
+            if (!DateTime.TryParseExact(model.End,
+                ValidationConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out end))
+            {
+                ModelState.AddModelError(nameof(model.End), $"Invalid date! Format must be: {ValidationConstants.DateFormat}");
+            }
+
+            if (!ModelState.IsValid) 
+            {
+                model.Types = await GetTypesAsync();
+                return View(model);
+            }
+
+            var even = new Event()
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Start = start,
+                End = end,
+                TypeId = model.TypeId,
+                OrganiserId = GetUserId()                
+            };
+
+            await context.Events.AddAsync(even);
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
+        public async Task<IEnumerable<Type>> GetTypesAsync() 
+        {
+            return await context.Types.AsNoTracking().ToListAsync();
         }
 
         private string GetUserId() 

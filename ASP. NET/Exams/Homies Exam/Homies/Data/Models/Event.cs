@@ -17,7 +17,7 @@ namespace Homies.Data.Models
         public string Name { get; set; } = string.Empty;
 
         [Required]
-        [MaxLength(ValidationConstants.EventNameMaxLength)]
+        [MaxLength(ValidationConstants.EventDescriptionMaxLength)]
         public string Description { get; set; } = string.Empty;
 
         [Required]
