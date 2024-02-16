@@ -44,7 +44,13 @@ namespace Homies.Controllers
                 .Include(x => x.EventsParticipants)
                 .FirstOrDefaultAsync();
 
+            if(model is null) 
+            {
+                return BadRequest();
+            }
+
             string userId = GetUserId();
+
 
             if (!model.EventsParticipants.Any(x => x.HelperId == userId)) 
             {
@@ -61,6 +67,39 @@ namespace Homies.Controllers
             }
 
             return RedirectToAction(nameof(Joined));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Leave(int id) 
+        {
+            var model = await context.Events
+                .Where(x => x.Id == id)
+                .AsNoTracking()
+                .Include(x => x.EventsParticipants)
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+
+            var ep = model.EventsParticipants.FirstOrDefault(x => x.HelperId == userId);
+
+            if(ep is null) 
+            {
+                return BadRequest();
+            }
+
+            model.EventsParticipants.Remove(ep);
+
+            context.EventsParticipants.Remove(ep);
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
         }
 
         private string GetUserId() 
