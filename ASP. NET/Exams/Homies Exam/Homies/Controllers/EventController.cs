@@ -259,6 +259,31 @@ namespace Homies.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await context.Events
+                .AsNoTracking()
+                .Where(e => e.Id == id)
+                .Select(e => new EventDetailsViewModel(
+                    e.Id,
+                    e.Name,
+                    e.Description,
+                    e.Start.ToString(ValidationConstants.DateFormat),
+                    e.End.ToString(ValidationConstants.DateFormat),
+                    e.Organiser.UserName,
+                    e.CreatedOn.ToString(ValidationConstants.DateFormat),
+                    e.Type.Name))
+                .FirstOrDefaultAsync();
+
+            if (model == null)
+            {
+                return BadRequest();
+            }
+
+            return View(model);
+        }
+
         public async Task<IEnumerable<Type>> GetTypesAsync() 
         {
             return await context.Types.AsNoTracking().ToListAsync();
