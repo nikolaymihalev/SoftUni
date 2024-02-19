@@ -81,6 +81,91 @@ namespace SeminarHub.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Join(int id)
+        {
+            var model = await context.Seminars
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Include(x => x.SeminarsParticipants)
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            if (!model.SeminarsParticipants.Any(x => x.ParticipantId == userId))
+            {
+                var sp = new SeminarParticipant()
+                {
+                    ParticipantId = userId,
+                    SeminarId = model.Id
+                };
+
+                model.SeminarsParticipants.Add(sp);
+
+                await context.SeminarsParticipants.AddAsync(sp);
+                await context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Joined));
+            }
+
+            return RedirectToAction(nameof(All));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Leave(int id)
+        {
+            var model = await context.Seminars
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Include(x => x.SeminarsParticipants)
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            var sp = model.SeminarsParticipants.FirstOrDefault(x => x.ParticipantId == userId);
+
+            if (sp is null)
+            {
+                return BadRequest();
+            }
+
+            model.SeminarsParticipants.Remove(sp);
+
+            context.SeminarsParticipants.Remove(sp);
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Joined));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Joined()
+        {
+            string userId = GetUserId();
+            var model = await context.SeminarsParticipants
+                .Where(x => x.ParticipantId == userId)
+                .Select(x => new SeminarInfoViewModel(
+                    x.Seminar.Id,
+                    x.Seminar.Topic,
+                    x.Seminar.Lecturer,
+                    x.Seminar.Category.Name,
+                    x.Seminar.DateAndTime.ToString(ValidationConstants.DateFormat),
+                    x.Seminar.Organizer.UserName))
+                .ToListAsync();
+
+            return View(model);
+        }
+
         private async Task<IEnumerable<Category>> GetCategories()
         {
             return await context.Categories.AsNoTracking().ToListAsync();
