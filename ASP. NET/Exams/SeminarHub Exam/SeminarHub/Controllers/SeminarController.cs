@@ -166,6 +166,83 @@ namespace SeminarHub.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var seminar = await context.Seminars.FindAsync(id);
+
+            if (seminar is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            if (seminar.OrganizerId != userId)
+            {
+                return Unauthorized();
+            }
+
+            var model = new SeminarFormViewModel()
+            {
+                Topic = seminar.Topic,
+                Lecturer = seminar.Lecturer,
+                Details = seminar.Details,
+                DateAndTime = seminar.DateAndTime.ToString(ValidationConstants.DateFormat),
+                Duration = seminar.Duration,
+                CategoryId = seminar.CategoryId,
+                Categories = await GetCategories()
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(SeminarFormViewModel model, int id)
+        {
+            var seminar = await context.Seminars.FindAsync(id);
+
+            if (seminar is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = GetUserId();
+
+            if (seminar.OrganizerId != userId)
+            {
+                return Unauthorized();
+            }
+
+            DateTime date = DateTime.Now;
+
+            if (!DateTime.TryParseExact(model.DateAndTime,
+                ValidationConstants.DateFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out date))
+            {
+                ModelState.AddModelError(nameof(model.DateAndTime), $"Invalid date! Format must be: {ValidationConstants.DateFormat}");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                model.Categories = await GetCategories();
+                return View(model);
+            }
+
+            seminar.Topic = model.Topic;
+            seminar.Lecturer = model.Lecturer;
+            seminar.Details = model.Details;
+            seminar.DateAndTime = date;
+            seminar.Duration = model.Duration;
+            seminar.CategoryId = model.CategoryId;
+            seminar.OrganizerId = userId;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private async Task<IEnumerable<Category>> GetCategories()
         {
             return await context.Categories.AsNoTracking().ToListAsync();
