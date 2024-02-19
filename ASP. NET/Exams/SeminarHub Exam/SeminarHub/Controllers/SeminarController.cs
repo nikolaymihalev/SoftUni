@@ -268,6 +268,63 @@ namespace SeminarHub.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var model = await context.Seminars
+                .Where(x => x.Id == id)
+                .Select(x => new SeminarDeleteViewModel(
+                    x.Id,
+                    x.Topic,
+                    x.DateAndTime,
+                    x.Organizer.UserName))
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var model = await context.Seminars
+                .Where(x => x.Id == id)
+                .Select(x => new SeminarDeleteViewModel(
+                    x.Id,
+                    x.Topic,
+                    x.DateAndTime,
+                    x.Organizer.UserName))
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            string userId = User?.Identity?.Name ?? string.Empty;
+
+            if (model.Organizer != userId)
+            {
+                return Unauthorized();
+            }
+
+            var seminar = await context.Seminars.FindAsync(id);
+
+            var sp = await context.SeminarsParticipants
+                .Where(x => x.SeminarId == id)
+                .ToListAsync();
+
+            context.SeminarsParticipants.RemoveRange(sp);
+            context.Seminars.Remove(seminar);
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(All));
+        }
+
         private async Task<IEnumerable<Category>> GetCategories()
         {
             return await context.Categories.AsNoTracking().ToListAsync();
