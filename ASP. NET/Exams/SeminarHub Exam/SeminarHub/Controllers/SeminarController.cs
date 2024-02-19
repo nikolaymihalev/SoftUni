@@ -243,6 +243,31 @@ namespace SeminarHub.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await context.Seminars
+                .AsNoTracking()
+                .Where(x => x.Id == id)
+                .Select(x => new SeminarDetailsViewModel(
+                    x.Id,
+                    x.Topic,
+                    x.Lecturer,
+                    x.Details,
+                    x.Duration,
+                    x.DateAndTime.ToString(ValidationConstants.DateFormat),
+                    x.Category.Name,
+                    x.Organizer.UserName))
+                .FirstOrDefaultAsync();
+
+            if (model is null)
+            {
+                return BadRequest();
+            }
+
+            return View(model);
+        }
+
         private async Task<IEnumerable<Category>> GetCategories()
         {
             return await context.Categories.AsNoTracking().ToListAsync();
