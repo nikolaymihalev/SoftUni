@@ -23,6 +23,25 @@ namespace AspNetCoreAdvancedDemo.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult Upload() => View();
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(List<IFormFile> files)
+        {
+            var filePath = Path.GetTempFileName();
+            foreach (var formFile in files.Where(f => f.Length > 0))
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await formFile.CopyToAsync(stream);
+                }
+            } 
+            var bytes = files.Sum(f => f.Length);
+            return Ok(new { count = files.Count, bytes, filePath });
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
