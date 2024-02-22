@@ -1,5 +1,6 @@
 ﻿using AspNetCoreAdvancedDemo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.FileProviders;
 using System.Diagnostics;
 
 namespace AspNetCoreAdvancedDemo.Controllers
@@ -39,6 +40,18 @@ namespace AspNetCoreAdvancedDemo.Controllers
             } 
             var bytes = files.Sum(f => f.Length);
             return Ok(new { count = files.Count, bytes, filePath });
+        }
+
+        public IActionResult Download(string fileName)
+        {
+            string filePath = Path.Combine(Environment.CurrentDirectory, "Files");
+            IFileProvider provider = new PhysicalFileProvider(filePath); 
+            IFileInfo fileInfo = provider.GetFileInfo(fileName); 
+
+            var readStream = fileInfo.CreateReadStream(); 
+            var mimeType = "application/octet-stream"; 
+
+            return File(readStream, mimeType, fileName); 
         }
 
 
