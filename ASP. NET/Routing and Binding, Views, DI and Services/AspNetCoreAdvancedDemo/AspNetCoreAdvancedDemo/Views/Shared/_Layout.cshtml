@@ -35,6 +35,9 @@
             @RenderBody()
         </main>
     </div>
+    <div id="sidebar">
+        @RenderSection("LeftSection", required: false);
+    </div>
 
     <footer class="border-top footer text-muted">
         <div class="container">
