@@ -15,6 +15,41 @@ namespace HouseRentingSystem.Core.Services
             repository = _repository;
         }
 
+        public async Task<IEnumerable<HouseCategoryServiceModel>> AllCategories()
+        {
+            return await repository.AllReadOnly<Category>()
+                .Select(x => new HouseCategoryServiceModel()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })
+                .ToListAsync();
+        }
+
+        public async Task<bool> CategoryExists(int categoryId)
+        {
+            return await repository.AllReadOnly<Category>().AnyAsync(x=> x.Id == categoryId);
+        }
+
+        public async Task<int> Create(HouseFormViewModel model, int agentId)
+        {
+            var house = new House()
+            {
+                Address = model.Address,
+                AgentId = agentId,
+                CategoryId = model.CategoryId,
+                ImageUrl =   model.ImageUrl,
+                Description = model.Description,
+                PricePerMonth = model.PricePerMonth,
+                Title = model.Title
+            };
+
+            await repository.AddAsync(house);
+            await repository.SaveChangesAsync();
+
+            return house.Id;
+        }
+
         public async Task<IEnumerable<HouseIndexServiceModel>> LastThreeHouses()
         {
             return await repository.AllReadOnly<House>()

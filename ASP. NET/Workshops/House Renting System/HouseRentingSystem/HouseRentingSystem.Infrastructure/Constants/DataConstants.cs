@@ -17,7 +17,7 @@
         public const int AgentPhoneMaxLength = 15;
         public const int AgentPhoneMinLength = 7;
 
-        public const string HouseRentingPriceMin = "0.00";
-        public const string HouseRentingPriceMax = "2000.00";
+        public const double HouseRentingPriceMin = 0;
+        public const double HouseRentingPriceMax = 20000;
     }
 }
