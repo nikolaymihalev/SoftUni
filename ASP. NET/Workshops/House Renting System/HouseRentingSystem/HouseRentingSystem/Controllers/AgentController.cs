@@ -1,11 +1,9 @@
 ﻿using HouseRentingSystem.Core.Models.Agent;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HouseRentingSystem.Controllers
 {
-    [Authorize]
-    public class AgentController : Controller
+    public class AgentController : BaseController
     {
         [HttpGet]
         public async Task<IActionResult> Become()
