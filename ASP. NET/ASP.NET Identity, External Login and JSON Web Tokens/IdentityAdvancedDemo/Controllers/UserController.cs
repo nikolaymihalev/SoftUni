@@ -177,5 +177,24 @@ namespace IdentityAdvancedDemo.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddUserToRole(string username, string roleName) 
+        {
+            if (await roleManager.RoleExistsAsync(roleName)) 
+            {
+                var user = await userManager.FindByNameAsync(username);
+
+                if (user != null) 
+                {
+                    if (await userManager.IsInRoleAsync(user, roleName) == false) 
+                    {
+                        await userManager.AddToRoleAsync(user, roleName);
+                    }
+                }
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
     }
 }
