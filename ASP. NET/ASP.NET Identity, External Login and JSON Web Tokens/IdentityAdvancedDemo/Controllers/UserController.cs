@@ -196,5 +196,10 @@ namespace IdentityAdvancedDemo.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult CheckRole(string roleName) 
+        {
+            return Ok(User.IsInRole(roleName));
+        }
     }
 }
