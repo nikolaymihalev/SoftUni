@@ -13,12 +13,16 @@ namespace IdentityAdvancedDemo.Controllers
 
         private readonly SignInManager<ApplicationUser> signInManager;
 
+        private readonly RoleManager<ApplicationRole> roleManager;
+
         public UserController(
+            RoleManager<ApplicationRole> _roleManager,
             UserManager<ApplicationUser> _userManager,
             SignInManager<ApplicationUser> _signInManager)
         {
             userManager = _userManager;
             signInManager = _signInManager;
+            roleManager = _roleManager;
         }
 
         [HttpGet]
@@ -131,7 +135,7 @@ namespace IdentityAdvancedDemo.Controllers
             if (remoteError != null)
             {
                 TempData["ErrorMessage"] = $"Error from external provider: {remoteError}";
-                
+
                 return RedirectToAction("Login", new { ReturnUrl = returnUrl });
             }
             var info = await signInManager.GetExternalLoginInfoAsync();
@@ -155,6 +159,23 @@ namespace IdentityAdvancedDemo.Controllers
             {
                 return RedirectToAction("Register");
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddRole(string roleName, string bgName) 
+        {
+            if(await roleManager.RoleExistsAsync(roleName)==false)
+            {
+                var role = new ApplicationRole()
+                {
+                    Name = roleName,
+                    BGName = bgName
+                };
+
+                await roleManager.CreateAsync(role);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
