@@ -1,0 +1,32 @@
+h1{
+    color:#090;
+}
+
+p{
+    font-size: 14px;
+}
+
+.highlight{
+    color: orange;
+}
+
+#main-title{
+    color:purple;
+}
+
+#special-paragraph{
+    font-style: italic;
+}
+
+ul{
+    background: #eee;;
+}
+
+li{
+    list-style-type: circle;
+    color: red;
+}
+
+div{
+    background: lightskyblue;
+}
