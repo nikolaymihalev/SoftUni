@@ -1,0 +1,18 @@
+p.highlited{
+    color: lightskyblue;
+    font-size: 18px;
+}
+
+div#special{
+    background: orange;
+    box-shadow: 0 0.2em 0.3em 0 rgb(0, 0, 0, 0.1);
+}
+
+a[href^="http"]{
+    border-bottom: 1px solid orange;
+    color: orange;
+}
+
+p.fancy.highlighted{
+    background: pink;
+}
