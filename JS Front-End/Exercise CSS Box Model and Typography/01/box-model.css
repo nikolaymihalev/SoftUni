@@ -1,0 +1,46 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.box-model{
+    max-width: 600px;
+    margin: 4em auto;
+}
+
+.box-model div{
+    border: 1px dashed black;
+    padding: 2em;
+}
+
+.margin{
+    background: #FF966F;
+}
+
+.margin::before{
+    display: block;
+    content: 'margin';
+}
+
+.border{
+    background: #FFE8C6;
+}
+
+.border::before{
+    display: block;
+    content: 'border';
+}
+
+.padding{
+    background: #85EB85;
+}
+
+.padding::before{
+    display: block;
+    content: 'padding';
+}
+.content{
+    background: #A3D2E2;
+    text-align: center;
+}
