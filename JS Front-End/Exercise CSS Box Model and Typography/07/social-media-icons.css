@@ -1,0 +1,29 @@
+body{
+    padding: 2em;
+}
+
+.socials li{
+    display: inline-block;
+    list-style: none outside;
+}
+
+.socials li a{
+    display: block;
+    background: #eee;
+    font-size: 2em;
+    width: 5rem;
+    aspect-ratio: 1/1;
+    text-align: center;
+    line-height: 5rem;
+    border-radius: 50%;
+    margin: 0 0.5rem;
+}
+
+.socials li a{
+    color: #000;
+}
+
+.socials li a:hover{
+    background: red;
+    color: #fff;
+}
