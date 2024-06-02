@@ -1,0 +1,16 @@
+div{
+    border: 2px solid black;
+    margin-bottom: 20px;
+}
+
+.uniform-margin{
+    margin: 20px;
+}
+
+.nonuniform-margin{
+    margin: 10px 30px 20px 40px;
+}
+
+.percentage-margin{
+    margin: -20px;
+}
