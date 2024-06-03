@@ -1,0 +1,28 @@
+.flex-container{
+    width: 340px;
+    border: 2px solid blue;
+    padding: 1em;
+    display: flex;
+}
+
+.flex-item{
+    border: 2px solid black;
+    background: #eee;
+    padding: 1em;
+}
+
+.flex-container.order-custom .flex-item:nth-child(1){
+    order: 5;
+}
+.flex-container.order-custom .flex-item:nth-child(2){
+    order: 3;
+}
+.flex-container.order-custom .flex-item:nth-child(3){
+    order: 1;
+}
+.flex-container.order-custom .flex-item:nth-child(4){
+    order: 6;
+}
+.flex-container.order-custom .flex-item:nth-child(5){
+    order: 2;
+}
