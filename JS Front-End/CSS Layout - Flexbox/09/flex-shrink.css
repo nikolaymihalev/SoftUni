@@ -1,0 +1,20 @@
+.flex-container{
+    width: 340px;
+    border: 2px solid blue;
+    padding: 1em;
+    display: flex;
+}
+
+.flex-item{
+    border: 2px solid black;
+    background: #eee;
+    padding: 1em;
+    flex-basis: 300px;
+}
+
+.flex-container.flex-shrink-zero .flex-item{
+    flex-shrink: 0;
+}
+.flex-container.flex-shrink-2nd .flex-item{
+    flex-shrink: 1;
+}

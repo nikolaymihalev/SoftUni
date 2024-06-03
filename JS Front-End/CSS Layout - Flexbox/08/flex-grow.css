@@ -1,0 +1,32 @@
+.flex-container{
+    width: 340px;
+    border: 2px solid blue;
+    padding: 1em;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.flex-item{
+    border: 2px solid black;
+    background: #eee;
+    padding: 1em;
+}
+
+.flex-container.flex-grow-one .flex-item{
+    flex-grow: 1;
+}
+
+.flex-container.flex-grow-second-child .flex-item:nth-child(2){
+    flex-grow: 1;
+}
+
+.flex-container.flex-grow-prop .flex-item:nth-child(1){
+    flex-grow: 1;
+}
+.flex-container.flex-grow-prop .flex-item:nth-child(2){
+    flex-grow: 2;
+}
+.flex-container.flex-grow-prop .flex-item:nth-child(3){
+    flex-grow: 3;
+}
