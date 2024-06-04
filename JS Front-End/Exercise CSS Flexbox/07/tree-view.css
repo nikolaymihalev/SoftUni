@@ -37,10 +37,6 @@ ul li li::before{
     left: -2px;
 }
 
-details{
-
-}
-
 details summary{
     display: flex;
     align-items: center;
