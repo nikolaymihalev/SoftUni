@@ -1,0 +1,92 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 2em;
+    font: 14px/1.5 Lato, sans-serif;
+    background: #eee;
+}
+
+.site{
+    background: #fff;
+    border-radius: 0.3em;
+    box-shadow: 0 0 1em 0 rgb(0,0,0,0.2);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1em;
+    overflow: hidden;
+}
+
+.site-header,
+.site-footer{
+    flex: 1 0 100%;
+}
+
+.site-content{
+    flex: 1 1 650px;
+    margin-left: 3em;
+    margin-right: 3em;
+}
+
+.site-sidebar{
+    flex: 1 0 250px;
+    margin-right: 3em;
+    margin-left: 3em;
+}
+
+.site-header{
+    margin-bottom: 1em;
+}
+
+.site-header a{
+    color: inherit;
+    text-decoration: none;
+}   
+
+.site-header h1{
+    color: #090;
+    padding: 1rem 1.5rem;
+}
+
+.site-header nav{
+    background: #333;
+    color: #ccc;
+}
+
+.site-header nav ul{
+    display: flex;
+}
+
+.site-header nav li{
+    display: block;
+    flex: 1 0 auto;
+    list-style: none outside;
+}
+
+.site-header nav a{
+    display: block;
+    padding: 1em 1.5em;
+}
+
+.site-header nav a:hover{
+    background: darkorange;
+    color: #fff;
+}
+
+.site-footer{
+    background: #333;
+    color: #ccc;
+    text-align: center;
+    padding: 1em 1.5em;
+    margin-top: 2em;
+}
+
+@media (max-width: 600px){
+    .site-header nav ul{
+        flex-direction: column;
+        text-align: center;
+    }
+}
