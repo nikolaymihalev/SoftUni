@@ -1,0 +1,57 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 2em;
+    background: #ccc;
+    font: 14px/1.5 Lato,sans-serif;
+}
+
+.site{
+    display: flex;
+    padding: 2em;
+    margin: 0 auto;
+    max-width: 900px;
+    background: #fff;
+    border-radius: 0.3em;
+}
+
+.site h2,
+.site p{
+    color: #727272;
+}
+
+.site p{
+    margin: 1em 0;
+}
+
+.buttons a{
+    display: inline-block;
+    text-decoration: none;
+    padding: 0.5em 1.5em;
+    border-radius: 0.3em;
+}
+
+.buttons a:nth-child(1){
+    background: purple;
+    color: white;
+}
+
+.buttons a:nth-child(2){
+    background: #ccc;
+    color: #727272;
+}
+
+.image::before{
+    margin-left: 1em;
+    display: block;
+    content: '';
+    border: 1px solid #727272;
+    height: 100%;
+    width: 250px;
+    background: #ccc;
+    border-radius: 0.3em;
+}
