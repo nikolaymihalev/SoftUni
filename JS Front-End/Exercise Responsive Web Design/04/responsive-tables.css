@@ -1,0 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding:2em;
+    font: 14px/1.5 Lato, sans-serif;
+    background-color: #eee;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+table td, table th{
+    padding: 1em 2em;
+    background: #fff;
+    border: 1px solid #333;
+}
+
+@media (max-width: 600px){
+    table,
+    table thead,
+    table tbody,
+    table tr,
+    table th,
+    table td{
+        display: block;
+    }
+    
+    table thead{
+        display: none;
+    }
+    
+    table tr{
+        padding: 2em 0;
+    }
+    
+    table tbody tr td::before{
+        display: inline-block;
+        content: attr(data-title);
+        padding-right: 1em;
+        font-weight: bold;
+    }
+}
