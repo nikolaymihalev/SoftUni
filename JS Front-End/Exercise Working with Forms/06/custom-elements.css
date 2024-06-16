@@ -1,0 +1,89 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 2em;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    background: #ccc;
+    font: 12px/1.5 Lato, sans-serif;
+}
+
+
+form{
+    padding: 2em;
+    background: #fff;
+    border-radius: 0.1em;
+    box-shadow: 0 0 1em 0 rgb(0, 0, 0, 0.1);
+    flex: 0 1 900px;
+}
+
+form ul{
+    margin-top: 1em;
+}
+
+form ul:not(:last-of-type){
+    margin-bottom: 2em;
+}
+
+form ul li{
+    list-style: none outside;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    padding: 1em;
+}
+
+form input[type="radio"],
+form input[type="checkbox"]{
+   appearance: none; 
+}
+
+form input[type="radio"]{
+    width: 2em;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ccc;
+    border: 1px solid #ccc;
+}
+
+form input[type="radio"]::before{
+    display: none;
+    content: '';
+    width: 1em;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    background: orange;
+}
+
+form input[type="radio"]:checked::before{
+    display: block;
+}
+
+form input[type="checkbox"]{
+    width: 3em;
+    border-radius: 2em;
+    aspect-ratio: 2/1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ccc;
+    border: 1px solid #ccc;
+}
+
+form input[type="checkbox"]::before{
+    display: none;
+    content: '';
+    width: 1em;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    background: orange;
+}
