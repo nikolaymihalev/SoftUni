@@ -1,0 +1,66 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 2em;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;   
+    background: #ccc;
+    font: 12px/1.5 Lato, sans-serif;
+}
+
+.login{
+    padding: 2em;
+    background: #fff;
+    border-radius: 0.1em;
+    box-shadow: 0 0 1em 0 rgb(0, 0, 0, 0.1);
+    flex: 0 1 900px;
+}
+
+.login input{
+    display: block;
+    width: 100%;
+}
+
+.login .field{
+    display: flex;
+    flex-direction: column;
+    color: #666;
+    position: relative;
+    padding-top: 0.5em;
+}
+
+.login .field label{
+    order: -1;
+    position: absolute;
+    top: 1em;
+    left: 0;
+    opacity: 0;
+    transition: transform 0.3s ease-in-out, opacity 0.3 ease-in;
+    line-height: 1;
+}
+
+.login .field input{
+    border: none;
+    border-bottom: 2px solid #ccc;
+    padding: 1em 0;
+    outline: none;
+}
+
+.login .field input:not(:placeholder-shown) ~ label{
+    transform: translateY(-1em);
+    opacity: 1;
+}
+
+.login .field input:focus{
+    border-color: orange;
+}
+
+.login .field input:focus ~ label{
+    color: orange;
+}
