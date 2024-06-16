@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body{
+    padding: 2em;
+    font: 12px/1.5 Lato, sans-serif;
+    border: 2px solid green;
+}
+
+.section{
+    border: 2px solid blue;
+    padding: 2em max(calc((100vw - 900px)/2), 2em);
+}
+
+.section + .section{
+    margin-top: 2em;
+}
+
+.section header{
+    background: #ccc;
+}
