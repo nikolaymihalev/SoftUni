@@ -9,3 +9,107 @@
 body{
     font: 14px/1.5 "PT Sans", sans-serif;
 }
+
+img{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.site-header .wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-nav ul {
+    display: flex;
+}
+
+.main-nav li{
+    display: block;
+    list-style: none;
+}
+
+.main-nav a{
+    display: block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+}
+
+.section .wrapper{
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.section .wrapper.wide{
+    max-width: 1800px;
+}
+
+.section-catalog{
+    background: #60ACC1;
+}
+
+.site-footer{
+    background: #2D333C;
+    color: #fff;
+    text-align: center;
+}
+
+.site-footer .wrapper{
+    padding: 1em 0;
+}
+
+.flex-colums{
+    display: flex;
+    justify-content: center;
+}
+
+.flex-colums .c2{
+    flex: 0 0 40%;
+}
+
+.flex-colums .c3{
+    flex: 0 0 30%;
+}
+
+.section-about,
+.section-catalog header{
+    text-align: center;
+}
+
+.section-catalog .wrapper{
+    padding: 1em 0 2em 0;
+}
+
+.section-catalog header{
+    padding-bottom: 1.5em;
+}
+
+.section-catalog .flex-colums.c3{
+    gap: 3em;
+}
+
+.section-catalog .flex-colums.c3 img{
+    box-shadow: 0 0 1em rgb(0, 0, 0,0.4);
+}
+
+.section-catalog .flex-colums.c2 article{
+    display: flex;
+}
+
+.section-catalog .flex-colums.c2 article h4{
+    text-align: center;
+    font-size: 1em;
+}
+
+.section-catalog .flex-colums.c2 article .media{
+    overflow: hidden;
+    position: relative;
+}
+
+.section-catalog .flex-colums.c2 article .media img{
+    position: absolute;
+    height: 100%;
+    width: auto;
+}
