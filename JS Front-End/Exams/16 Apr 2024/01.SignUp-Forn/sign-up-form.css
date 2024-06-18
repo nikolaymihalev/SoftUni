@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Kode+Mono:wght@400..700&display=swap');
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font: 14px/1.5 "Kode Mono", sans-serif;
+}
+
+body, input, button, textarea{
+    font: inherit;
+}
+
+body{
+    padding: 2em;
+}
+
+.section{
+    max-width: 750px;
+    background: #24333C;
+    border-radius: 0.3em;
+    margin: 0 auto;
+    padding: 2em;
+    font-size: 1.6em;
+}
+
+.section-nav{
+    margin-bottom: 2em;
+}
+
+.section-nav ul{
+    display: flex; 
+    width: 100%;
+}
+
+.section-nav li{
+    display: block;
+    list-style: none outside;
+    flex: 1 1 100%;
+    text-align: center;
+}
+
+.section-nav a {
+    text-decoration: none;
+    display: block;
+    padding: 1em 2em;
+    background: #435359;
+    color: #728385;
+    font-weight: bold;
+}
+
+.section-nav a:hover {
+    background: #179A77;
+    color: #fff;
+    font-weight: normal;
+}
+
+.section-nav .current{
+    background: #1AB188;
+    color: #fff;
+    font-weight: normal;
+}
+
+.section h1{
+    color: #fff;
+    text-align: center;
+    font-weight: normal;
+    margin-bottom: 1em;
+}
+
+.field {
+    position: relative;
+    margin-bottom: 2em;
+}
+
+.field input{
+    display: block;
+    background: transparent;
+    border: 2px solid #728385;
+    width: 100%;
+}
+
+.field label{
+    display: block;
+    color: #728385;
+    font-weight: bold;
+    position: absolute;
+    padding: 0.2em 0.5em;
+    top: 0;
+    left: 0;
+}
+
+.field input:required ~ label::after{
+    display: inline-block;
+    content: '*';
+    color: #1AB188;
+    padding-left: 0.3em;
+}
+
+.flex-wrapper{
+    display: flex;
+    gap: 1em;
+}
+
+.flex-wrapper .field{
+    flex: 1 1 auto;    
+}
+
+.section input[type="submit"]{
+    display: block;
+    width: 100%;
+    background: #1AB188;
+    color: #fff;
+    border: none;
+    font-size: 1.5em;
+    padding: 0.5em 1em;
+}
