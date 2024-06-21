@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Karla&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Infant&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    font: 16px/1.5 "Cormorant Infant", sans-serif;
+}
+
+.background{
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    bottom: 0px;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    z-index: -100;
+}
+
+.header-header{
+    display: flex;
+    justify-content: space-between;
+    padding: 1em 5em;
+    align-items: center;    
+}
+
+.main-nav ul{
+    display: flex;
+    gap: 3em;
+}
+
+.main-nav li {
+    list-style: outside none;
+}
+
+.main-nav a{
+    text-decoration: none;
+    color: #fff;
+    font-family: "Karla", sans-serif;
+}
+
+.header-header .main-img{
+    flex: 0 1 10%;
+}
+
+.main-img img{
+    width: 50%;
+    height: 50%;
+}
+
+.header-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-content h1{
+    flex: 1 1 auto;
+    color: #fff;
+    font-size: 90px;
+    text-align: center;
+    margin-top: 2em;
+}
+
+.header-content p{
+    flex: 1 1 auto;
+    color: #fff;
+    text-align: center;
+    margin: 6em 0;
+    font-family: "Karla", sans-serif;
+}
+
+.section-content{
+    background: #F8F0E9;
+    display: flex;
+    flex-direction: column;
+    font-family: "Karla", sans-serif;
+    padding: 2em;
+    align-items: center;
+}
+
+.section-content p {
+    width: 45%;
+}
+
+.section-content h1{
+    font-style: italic;
+    font-family: "Cormorant Infant", sans-serif;
+    font-size: 2.5em;
+    opacity: 0.9;
+    width: 45%;
+    margin: 2rem 0;
+    text-align: start;
+}
+
+.section-support{
+    background: #E14747;
+    display: flex;
+    flex-direction: column;
+    font-family: "Karla", sans-serif;
+    color: #fff;
+    padding: 3em;
+    align-items: center;
+}
+
+.section-support p {
+    margin-top: 2em;
+    width: 15%;
+    text-align: center;
+}
+
+.section-info{
+    background: #F8F0E9;
+    display: flex;
+    flex-direction: column;
+    font-family: "Karla", sans-serif;
+    color: #000;
+    padding: 3em;
+    align-items: center;
+}
+
+.section-info img{
+    width: 25%;
+    aspect-ratio: 1/0.8;
+}
+
+.section-info h1{
+    font-family: "Cormorant Infant", sans-serif;
+    font-size: 3em;
+    opacity: 0.9;
+    width: 20%;
+    text-align: center;
+    margin: 3rem;
+}
+
+.section-info p{
+    width: 25%;
+}
+
+.section-info a{
+    text-decoration: none;
+    color: #000;
+    background: #fff;
+    display: block;
+    padding: 0.5em 1em;
+    border: 1px solid #000;
+    border-radius: 0.3em;
+}
+
+.section-info .current{
+    margin: 4em 0 4em 37.5%;
+    align-self: flex-start;    
+}
+
+.section-guide{
+    background: #E14747;
+    color: #fff;
+    padding: 4em;
+    font-family: "Karla", sans-serif;
+    align-items: center;
+    text-align: center;
+}
+
+.section-guide h1{
+    font-family: "Cormorant Infant", sans-serif;
+    font-size: 3em;
+    margin-top: 1em;
+}
+
+.section-guide p {
+    margin: 3em 0;
+}
+
+.section-guide a{
+    text-decoration: none;
+    color: #000;
+    background: #FAD87A;
+    padding: 1em 1.5em;
+    border-radius: 5em;
+}
+
+footer{
+    background: #352B2A;
+    padding: 2em 5em;
+    color: #fff;
+}
+
+footer img{
+    width: 5%;
+    margin: 1em 0;
+}
+
+footer p{
+    margin: 2em 0;
+}
+
+.copy{
+    color: #5F5252;
+    margin: 0;
+}
