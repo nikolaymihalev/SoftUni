@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&amp;display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font: 14px/1.5 "Inter", sans-serif;
+    background-image: url('images/background.jpg');
+}
+
+.poster{
+    max-width: 1625px;
+    margin: 3em auto;
+    display: flex;
+    gap: 3em;
+}
+
+.info{
+    padding: 2em;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    gap: 5em;
+}
+
+.info img{
+    width: 15%;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+}
+
+.container-left{
+    display: flex;
+    flex-direction: column;
+    gap: 3em;
+}
+
+.description p{
+    margin: 1em 0;
+}
+
+.description h1{
+    font-size: 10em;
+    height: 100px;
+}
+
+.container-right .info{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.right-info{
+    align-items: start;
+    gap: 0;
+    padding-top: 0;
+}
+
+.right-info h1{
+    font-size: 15em;
+    height: 150px;
+}
+
+.right-info p{
+    margin: 3em 0 9em 0;
+}
+
+
+.author{
+    border-top: 1px solid gray;
+}
+
+.author-desc{
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+    margin-bottom: 0;
+    gap: 1.5em;
+}
+
+.author-desc img{
+    aspect-ratio: 1/1;
+}
+
+.author-info p{
+    margin: 0;
+}
