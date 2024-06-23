@@ -23,7 +23,8 @@ li{
     max-width: 1000px;
     background: #fff;
     border-radius: 1em;
-    margin: 3em auto;    
+    margin: 3em auto;   
+    box-shadow: 0 0 1em 0 rgb(0, 0, 0, 0.2);   
 }
 
 .card-header{
