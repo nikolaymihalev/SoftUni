@@ -1,0 +1,9 @@
+function solve(arr) {
+    const result = arr
+        .slice()
+        .sort((a, b) => a.localeCompare(b))
+        .map((x, i) => `${i+1}.${x}`)
+        .join("\n");
+
+    console.log(result);
+}
