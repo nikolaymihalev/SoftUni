@@ -1,3 +1,3 @@
-function solve() {
-    
+function solve(base, radix) {
+    console.log(base ** radix);
 }
