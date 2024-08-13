@@ -1,5 +1,3 @@
-window.addEventListener("load", solve);
-
 function solve() {
   const addBtn = document.getElementById('add-btn');
   const checkList = document.getElementById('check-list');
